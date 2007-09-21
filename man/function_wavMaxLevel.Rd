@@ -28,7 +28,7 @@ are \code{"dwt"}, \code{"dwpt"}, \code{"modwt"}, and \code{"modwpt"}. Default: \
 
 \value{
 an integer denoting the maximum decomposition level which
-contains at least one interior wavelet coefficient.
+contains more than one interior wavelet coefficient.
 }
 \seealso{
 \code{\link{wavDWT}},

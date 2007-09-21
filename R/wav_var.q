@@ -525,7 +525,7 @@
 # Constructor: wavVar
 ###
 
-"wavVar" <- function(x, sdf=NULL, xform="modwt", wavelet= "s8", n.levels=NULL,
+"wavVar" <- function(x, sdf=NULL, xform="modwt", wavelet="s8", n.levels=NULL,
   position=list(from=1,by=1,units=character()), units=character(),
   documentation=character(), ...)
 {
@@ -542,7 +542,7 @@
   filter <- mutilsFilterType(wavelet)
 
   if (is.null(n.levels))
-	 n.levels <- wavMaxLevel(n.taps=filter$length, n.sample=length(x), xform=xform)
+    n.levels <- wavMaxLevel(n.taps=filter$length, n.sample=length(x), xform=xform)
 
   # calculate sdf function over appropriate range of frequencies
   # such that f=[0, 1/P , 2/P, 3/P, ..., (M-1)/P] where P=2*(M-1)

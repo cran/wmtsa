@@ -48,7 +48,12 @@
      CLASSES=rep("integer",4),
      PACKAGE="ifultools")[[3]]
 
-   as.integer(max(which(as.logical(n.interior))))
+   # here we require that the number of interior wavelet coefficients
+   # be greater than unity (rather than greater than zero). we do this
+   # because it leads to problems in the C code for wavelet variance in
+   # the case that the n.coefficients is unity.
+
+   as.integer(max(which(as.logical(n.interior > 1))))
 }
 
 ###
