@@ -42,6 +42,7 @@
   Dplus  <- max((index + 1) / Nm1 - P)
   Dminus <- max(P - (index / Nm1))
   D      <- max(c(Dplus, Dminus))
+  # my (dbp) very first comment!!! This was a great comment!
   D
 }
 
