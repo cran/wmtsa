@@ -20,19 +20,23 @@
 # holderSpectrum
 ###
 
-"holderSpectrum" <- function(chains, n.scale.min=3, fit=lmsreg)
+"holderSpectrum" <- function(x, n.scale.min=3, fit=lmsreg)
 {
-  n.chain         <- length(chains)
-  holder.time     <- vector(mode="integer", length=n.chain)
-  holder.exponent <- vector(mode="numeric", length=n.chain)
+  if (!is(x,"wavCWTTree"))
+    stop("x must an object of class wavCWTTree")
+
+  n.branch <- length(x)
+  ibranch  <- vector(mode="integer", length=n.branch)
+  branch   <- seq(n.branch)
+  holder.exponent <- holder.time <- vector(mode="numeric", length=n.branch)
 
   count <- 0
 
-  for (i in seq(chains)){
+  for (i in branch){
 
-    times    <- chains[[i]]$time
-    logscale <- logb(chains[[i]]$scale, base=2)
-    logwtmm  <- logb(chains[[i]]$extrema, base=2)
+    times    <- x[[i]]$time
+    logscale <- logb(x[[i]]$scale, base=2)
+    logwtmm  <- logb(x[[i]]$extrema, base=2)
 
     if (length(logscale) > 1){
 
@@ -59,15 +63,19 @@
           lm(logwtmm ~ logscale, subset=seq(div), data=datalist))
 
         holder.exponent[count] <- coef(model)["logscale"]
+
+        ibranch[count] <- i
       }
     }
   }
 
-  holder.exponent <- holder.exponent[1:count]
-  holder.time     <- holder.time[1:count]
+  igood <- seq(count)
+  holder.exponent <- holder.exponent[igood] - 0.5
+  holder.time     <- holder.time[igood]
+  branch          <- branch[ibranch[igood]]
 
   itime <- order(holder.time)
-  list(exponent=holder.exponent[itime], time=holder.time[itime])
+  list(exponent=holder.exponent[itime], time=holder.time[itime], branch=branch[itime])
 }
 
 ###
@@ -630,12 +638,14 @@
 
 "summary.wavCWTTree" <- function(object, ...)
 {
-  z <- data.frame(do.call("rbind",lapply(object, function(x){
+  tmpargs <- lapply(object, function(x){
 
     scale <- x$scale
     ext <- x$extrema
 
-    c(x$time[which.min(scale)], length(x$time), log2(max(scale) / min(scale)), range(ext), mean(ext), sd(ext), var(ext), mad(ext))})))
+    c(x$time[which.min(scale)], length(x$time), log2(max(scale) / min(scale)), range(ext), mean(ext), sd(ext), var(ext), mad(ext))})
+    
+  z <- data.frame(do.call("rbind", tmpargs))
 
   names(z) <- c("End Time", "Length", "Octaves", "Min", "Max", "Mean", "SD", "Var", "MAD")
 
@@ -701,7 +711,8 @@
    noise.min=noise.min,
    noise.span=noise.span))
 
-  peaks <- data.frame(do.call("rbind", lapply(x, function(x) unlist(lapply(x, function(x, imax) x[imax], imax=which.max(x$extrema))))))
+  tmpargs <- lapply(x, function(x) unlist(lapply(x, function(x, imax) x[imax], imax=which.max(x$extrema))))
+  peaks <- data.frame(do.call("rbind", tmpargs))
   peaks <- cbind(data.frame(branch=row.names(peaks)), peaks, data.frame(iendtime=attr(x,"iendtime")))
   peak.snr <- peaks[["extrema"]] / noise.levels
   peak.scale <- peaks[["scale"]]

@@ -11,14 +11,12 @@
 \alias{holderSpectrum}
 \title{The Holder spectrum of a time series}
 \concept{Holder spectrumsingularity detection}
-\usage{holderSpectrum(chains, n.scale.min=3, fit=lmsreg)}
+\usage{holderSpectrum(x, n.scale.min=3, fit=lmsreg)}
 \description{Using a  tree, this function returns time localized  exponent
 estimations for a given time series.}
 
 \arguments{
-\item{chains}{a list containing information regarding the WTMM chains as output by the \code{wavCWTTree} function.
-Each element of the list is itself a list containing the named elements \code{"time"}, \code{"scale"}, and \code{"wtmm"}
-corresponding to the location of the current chain in time, in scale, and its corresponding WTMM value, respectively.}
+\item{x}{an object of class \code{wavCWTTree}.}
 \item{fit}{a linear regression function to use in fitting the resulting data. Default: \code{lmsreg}.}
 
 \item{n.scale.min}{the minimum number of scales (points) that a given \emph{suitable}
@@ -27,7 +25,7 @@ branch segment must have before being considered as an admissible candidate for
 }
 
 \value{
-a list containing the estimated  \code{exponent} and corresponding \code{time} vectors.
+a list containing the estimated  exponents, associated times and corresponding branch number.
 }
 \details{
 %
@@ -86,26 +84,31 @@ J.F. Muzy, E. Bacry, and A. Arneodo, ``The multifractal formalism revisited with
 \code{\link{wavCWT}}, \code{\link{wavCWTFilters}}, \code{\link{wavCWTTree}}.}
 
 \examples{
-## calculate the CWT of a random walk series and 
-## the plot the result with an overlay of the 
-## original time series above the CWT image 
-set.seed(100)
-x <- cumsum(rnorm(1024))
-x.cwt <- wavCWT(x)
-plot(x.cwt, series=TRUE)
+## create series with a linear trend and two 
+## cusps: h(x = 1) = 0.5 and h(x = 15) = 0.3 
+cusps <- function(x) -0.2 * abs(x-1)^0.5 - 0.5* abs(x-15)^0.3 + 0.00346 * x + 1.34
+x <- seq(-5, 20, length=1000)
+y <- signalSeries(cusps(x), x)
 
-## create a WTMM tree and plot the first 50 
-## branches found 
-x.tree <- wavCWTTree(x.cwt)
-plot(x.tree[1:50])
+## calculate CWT using Mexican hat filter 
+W <- wavCWT(y, wavelet="gaussian2")
 
-## estimate and plot the Holder spectrum 
-x.holder <- holderSpectrum(x.tree)
-old.plt <- splitplot(2,1,1)
-plot(x, type="l", col="blue", ylab="RANDOM WALK", xlab="TIME")
-splitplot(2,1,2)
-plot(x.holder$time, x.holder$exponent, type="s", xlab="TIME",ylab="Holder exponent")
-par(old.plt)
+## calculate WTMM and extract first two branches 
+## in tree corresponding to the cusps 
+W.tree <- wavCWTTree(W)[1:2]
+
+## plot the CWT tree overlaid with a scaled 
+## version of the time series to illustrate 
+## alignment of branches with cusps 
+yshift <- y@data - min(y@data)
+yshift <- yshift / max(yshift) * 4 - 4.5
+plot(W.tree, xlab="x")
+lines(x, yshift, lwd=2)
+text(6.5, -1, "f(x) = -0.2|x-1|^0.5 - 0.5|x-15|^0.3 + 0.00346x + 1.34", cex=0.8)
+
+## estimate Holder exponents 
+holder <- holderSpectrum(W.tree)
+print(holder)
 }
 \keyword{univar}
 \keyword{models}

@@ -78,7 +78,7 @@ by the \code{\link{wavCWTTree}} function. The \code{wavCWTpeaks} function prunes
 input CWT tree and records the termination time (i.e., the time associated with
 point of the branch that is closest to scale zero) as the time index associated
 with the local peak of the corresponding time series. Information regarding the collection of isolated peaks
-is returned as a \code{\link{data.frame}} object.
+is returned as a \code{\link[base]{data.frame}} object.
 
 The tree branches are pruned in the following ways:
 \describe{
