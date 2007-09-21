@@ -1,5 +1,5 @@
 ################################################
-## S+WMTSA wavelet variance functionality
+## WMTSA package wavelet variance functionality
 ##
 ##  Functions:
 ##
@@ -745,11 +745,11 @@
     nms   <- rev(names(x$time$unbiased))
 
     if (biased){
-      stack.plot(x$time$biased[nms], times=times, same.scale=same.scale, zeroline=zero.line)
+      wavStackPlot(x$time$biased[nms], times=times, same.scale=same.scale, zeroline=zero.line)
       title(paste(biased.title,"\n\n",series.name),xlab=xlab)
     }
     else{
-      stack.plot(x$time$unbiased[nms], times=times, same.scale=same.scale, zeroline=zero.line)
+      wavStackPlot(x$time$unbiased[nms], times=times, same.scale=same.scale, zeroline=zero.line)
       title(paste(unbiased.title,"\n\n",series.name),xlab=xlab)
     }
 

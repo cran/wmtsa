@@ -5,7 +5,7 @@
 %%  documentation (such as corresponding LaTeX, SGML and HTML documentation) 
 %%  should be regenerated using the mid.pl Perl script. 
 
-%% R documentation for the wavTransform, [.wavTransform, [<-.wavTransform, [[.wavTransform, as.matrix.wavTransform, boxplot.wavTransform, eda.plot.wavTransform, plot.wavTransform, plot.wavTransform.crystal, print.wavTransform, print.summary.wavTransform, stack.plot.wavTransform, summary.wavTransform, reconstruct.wavTransform functions
+%% R documentation for the wavTransform, [.wavTransform, [<-.wavTransform, [[.wavTransform, as.matrix.wavTransform, boxplot.wavTransform, eda.plot.wavTransform, plot.wavTransform, plot.wavTransform.crystal, print.wavTransform, print.summary.wavTransform, wavStackPlot.wavTransform, summary.wavTransform, reconstruct.wavTransform functions
 
 \name{wavTransform}
 \alias{wavTransform}
@@ -19,7 +19,7 @@
 \alias{plot.wavTransform.crystal}
 \alias{print.wavTransform}
 \alias{print.summary.wavTransform}
-\alias{stack.plot.wavTransform}
+\alias{wavStackPlot.wavTransform}
 \alias{summary.wavTransform}
 \alias{reconstruct.wavTransform}
 \title{Constructor function for objects of class wavTransform}
@@ -124,11 +124,11 @@ Usage: reconstruct(x)
 If the transform coefficients were not modified, the original
 time series will be returned (+/- some numerical noise).}
 
-\item{stack.plot}{stack plot of the wavelet transform.
-Usage: stack.plot(x)}
-
 \item{summary}{provide a statistical summary of the wavelet transform object.
 Usage: z <- summary(x); print(z)}
+
+\item{wavStackPlot}{stack plot of the wavelet transform.
+Usage: wavStackPlot(x)}
 
 }
 }

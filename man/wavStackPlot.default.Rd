@@ -5,13 +5,13 @@
 %%  documentation (such as corresponding LaTeX, SGML and HTML documentation) 
 %%  should be regenerated using the mid.pl Perl script. 
 
-%% R documentation for the stack.plot.default function
+%% R documentation for the wavStackPlot.default function
 
-\name{stack.plot.default}
-\alias{stack.plot.default}
+\name{wavStackPlot.default}
+\alias{wavStackPlot.default}
 \title{Plot wavelet transform crystals}
 \concept{wavelettransforms}
-\usage{stack.plot.default(x, x.axis=TRUE, y.axis=TRUE, type="l", plot=TRUE,
+\usage{\method{wavStackPlot}{default}(x, x.axis=TRUE, y.axis=TRUE, type="l", plot=TRUE,
     bars=FALSE, vgap=.05, grid=FALSE, times=time(x[[1]]),
     grid.lty="dashed", same.scale=NULL,
     zerocenter=FALSE, zeroline=FALSE, col=rep(1,n),
@@ -65,7 +65,7 @@ of \code{wavTransform} objects.
 }
 
 \examples{
-stack.plot.default(wavMODWT(sunspots)$data)
+wavStackPlot.default(wavMODWT(sunspots)$data)
 }
 \keyword{hplot}
 

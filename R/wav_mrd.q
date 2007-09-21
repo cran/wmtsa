@@ -1,5 +1,5 @@
-#########################################################
-## S+WMTSA multiresolution decomposition functionality
+#############################################################
+## WMTSA package multiresolution decomposition functionality
 ##
 ##  Functions:
 ##
@@ -24,7 +24,7 @@
 ##      stack.plot.wavMRD
 ##      summary.wavMRD
 ##
-#########################################################
+#############################################################
 
 ###
 # wavMRD (constructor)
@@ -431,10 +431,10 @@
 "reconstruct.wavMRD" <- function(x, ...) apply(x, 1, "sum")
 
 ###
-# stack.plot.wavMRD
+# wavStackPlot.wavMRD
 ###
 
-"stack.plot.wavMRD"  <- function(x, n.top=15, vgap=.05, col=1, ...)
+"wavStackPlot.wavMRD"  <- function(x, n.top=15, vgap=.05, col=1, ...)
   plot.wavMRD(x, n.top=n.top, vgap=vgap, col=col, ...)
 
 ###

@@ -26,7 +26,7 @@ inherited function without alteration and with the original names preserved.}
 \seealso{
 \code{\link{wavMRD}},
 \code{\link{wavTransform}},
-\code{\link{stack.plot}},
+\code{\link{wavStackPlot}},
 \code{\link{crystal.names}}.
 }
 

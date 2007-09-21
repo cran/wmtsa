@@ -5,7 +5,7 @@
 %%  documentation (such as corresponding LaTeX, SGML and HTML documentation) 
 %%  should be regenerated using the mid.pl Perl script. 
 
-%% R documentation for the wavMRD, [.wavMRD, [<-.wavMRD, [[.wavMRD, as.matrix.wavMRD, boxplot.wavMRD, crystal.names.wavMRD, dotchart.wavMRD, eda.plot.wavMRD, plot.wavMRD, print.wavMRD, print.summary.wavMRD, reconstruct.wavMRD, stack.plot.wavMRD, summary.wavMRD functions
+%% R documentation for the wavMRD, [.wavMRD, [<-.wavMRD, [[.wavMRD, as.matrix.wavMRD, boxplot.wavMRD, crystal.names.wavMRD, dotchart.wavMRD, eda.plot.wavMRD, plot.wavMRD, print.wavMRD, print.summary.wavMRD, reconstruct.wavMRD, wavStackPlot.wavMRD, summary.wavMRD functions
 
 \name{wavMRD}
 \alias{wavMRD}
@@ -21,7 +21,7 @@
 \alias{print.wavMRD}
 \alias{print.summary.wavMRD}
 \alias{reconstruct.wavMRD}
-\alias{stack.plot.wavMRD}
+\alias{wavStackPlot.wavMRD}
 \alias{summary.wavMRD}
 \title{Calculate the detail sequences for wavelet transform crystals}
 \concept{class constructordetail function generationmultiresolution decompositionwavelet}
@@ -124,11 +124,11 @@ Usage: reconstruct(x)
 If the transform coefficients were not modified, the original
 time series will be returned (+/- some numerical noise).}
 
-\item{stack.plot}{stack plot of the wavelet transform details/smooth.
-Usage: stack.plot(x)}
-
 \item{summary}{provide a statistical summary of the wavelet transform details/smooth object.
 Usage: z <- summary(x); print(z)}
+
+\item{wavStackPlot}{stack plot of the wavelet transform details/smooth.
+Usage: wavStackPlot(x)}
 
 }
 }

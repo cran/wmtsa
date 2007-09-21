@@ -1,12 +1,12 @@
 ################################################
-## S+WMTSA generic functionality
+## WMTSA package generic functionality
 ##
 ##  Functions:
 ##
 ##    crystal.names
 ##    eda.plot
 ##    reconstruct
-##    stack.plot
+##    wavStackPlot
 ##
 ################################################
 
@@ -32,8 +32,8 @@
   UseMethod("reconstruct")
 
 ###
-# stack.plot
+# wavStackPlot
 ##
 
-"stack.plot" <- function(x, ...)
-  UseMethod("stack.plot")
+"wavStackPlot" <- function(x, ...)
+  UseMethod("wavStackPlot")

@@ -5,13 +5,13 @@
 %%  documentation (such as corresponding LaTeX, SGML and HTML documentation) 
 %%  should be regenerated using the mid.pl Perl script. 
 
-%% R documentation for the stack.plot function
+%% R documentation for the wavStackPlot function
 
-\name{stack.plot}
-\alias{stack.plot}
+\name{wavStackPlot}
+\alias{wavStackPlot}
 \title{Generic function for generating stacked plots}
 \concept{wavelet}
-\usage{stack.plot(x, ...)}
+\usage{wavStackPlot(x, ...)}
 \description{Stackplots stack each plot on top of one another without having to
 manually divide the ploting region via \code{par("mfrow")} or other.}
 
@@ -30,7 +30,7 @@ inherited function without alteration and with the original names preserved.}
 }
 
 \examples{
-methods(stack.plot)
+methods(wavStackPlot)
 }
 \keyword{methods}
 

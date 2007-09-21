@@ -1,5 +1,5 @@
-#########################################################
-## S+WMTSA wavelet transform coefficient functionality
+#############################################################
+## WMTSA package wavelet transform coefficient functionality
 ##
 ##  Functions:
 ##
@@ -15,7 +15,7 @@
 ##      print.summary.wavBoundary
 ##      summary.wavBoundary
 ##
-#########################################################
+#############################################################
 
 ###
 # wavBoundary (constructor)
@@ -311,7 +311,7 @@
       axis(side=2, at=-(1:n)+.5, lab=crystals, tick=FALSE, line=1, srt=0, col=1, ...)
   }
 
-  # TODO: replace this with stack.plot functionality
+  # TODO: replace this with wavStackPlot functionality
   # plot the data
 
   for(i in 1:n){

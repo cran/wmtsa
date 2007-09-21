@@ -1,5 +1,5 @@
 ################################################
-## S+WMTSA wavelet transform functionality
+## WMTSA package wavelet transform functionality
 ##
 ##  Functions:
 ##
@@ -31,7 +31,7 @@
 ##      plot.wavTransform.crystal
 ##      print.wavTransform
 ##      print.summary.wavTransform
-##      stack.plot.wavTransform
+##      wavStackPlot.wavTransform
 ##      summary.wavTransform
 ##      reconstruct.wavTransform
 ##
@@ -825,7 +825,7 @@
 ##      plot.wavTransform.crystal
 ##      print.wavTransform
 ##      print.summary.wavTransform
-##      stack.plot.wavTransform
+##      wavStackPlot.wavTransform
 ##      summary.wavTransform
 ##      reconstruct.wavTransform
 ##
@@ -1169,9 +1169,9 @@
     # if the number of crystals is less than
     # that in a full transform, the user has
     # extracted a subset and thus only
-    # issue a stack.plot
+    # issue a wavStackPlot
     if (length(x$data) < (2^(n.levels+1) - 1)){
-      stack.plot.default(x$data)
+      wavStackPlot.default(x$data)
       return(NULL)
     }
 
@@ -1248,7 +1248,7 @@
   else{
 
       if (is.element(x$xform, c("dwt","modwt")))
-      invisible(stack.plot(x, cex.main=cex.main, same.scale=TRUE, type=type, add=add, ...))
+      invisible(wavStackPlot(x, cex.main=cex.main, same.scale=TRUE, type=type, add=add, ...))
   	else if (is.element(x$xform, c("dwpt","modwpt")))
   	  invisible(packet.plot(x, vgap=0.05, grid=TRUE,
   	  grid.lty=grid.lty, border=TRUE, add=add, cex.main=cex.main, ...))
@@ -1260,7 +1260,7 @@
 ###
 
 "plot.wavTransform.crystal"  <- function(x, ...)
-  invisible(stack.plot(x, ...))
+  invisible(wavStackPlot(x, ...))
 
 ###
 # print.wavTransform
@@ -1312,10 +1312,10 @@
 }
 
 ###
-# stack.plot.wavTransform
+# wavStackPlot.wavTransform
 ###
 
-"stack.plot.wavTransform" <- function(x, data=TRUE, same.scale=TRUE,
+"wavStackPlot.wavTransform" <- function(x, data=TRUE, same.scale=TRUE,
   title.=NULL, xlab=NULL, cex.main=0.7, zeroline=TRUE, times=NULL, add=FALSE, adj=1, ...)
 {
   # save plot parameters and restore upon exit
@@ -1388,7 +1388,7 @@
     else times <- as(series@positions,"numeric")
   }
 
-  stack.plot.default(y, same.scale=same.scale, y.axis=TRUE,
+  wavStackPlot.default(y, same.scale=same.scale, y.axis=TRUE,
 	 cex.main=cex.main, zeroline=zeroline, times=times,
 	 bars=FALSE, ...)
 

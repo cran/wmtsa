@@ -1,17 +1,17 @@
 ################################################
-## S+WMTSA plot functionality
+## WMTSA package plot functionality
 ##
 ##  Functions:
 ##
-##   stack.plot.default
+##   wavStackPlot.default
 ##
 ################################################
 
 ###
-# stack.plot.default
+# wavStackPlot.default
 ##
 
-"stack.plot.default" <- function(x, x.axis=TRUE, y.axis=TRUE, type="l", plot=TRUE,
+"wavStackPlot.default" <- function(x, x.axis=TRUE, y.axis=TRUE, type="l", plot=TRUE,
   bars=FALSE, vgap=.05, grid=FALSE, times=time(x[[1]]),
   grid.lty="dashed", same.scale=NULL,
   zerocenter=FALSE, zeroline=FALSE, col=rep(1,n), complex.math="mod", cex.main=0.7, cex.axis=0.7, ...)
