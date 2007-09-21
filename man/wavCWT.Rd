@@ -125,8 +125,7 @@ Time Series Analysis}, Cambridge University Press, 2000.
 }
 
 \seealso{
-\code{\link{wavCWTFilters}}.
-}
+\code{\link{wavCWTFilters}}.}
 
 \examples{
 ## calculate the CWT of the sunspots series using 

@@ -23,11 +23,7 @@ a white noise model.}
 
 }
 \seealso{
-\code{\link{wavVar}},
-\code{\link{wavVarTest}},
-\code{\link{D.table}},
-\code{\link{D.table.critical}}.
-}
+\code{\link{wavVar}}, \code{\link{wavVarTest}}, \code{\link{D.table}}, \code{\link{D.table.critical}}.}
 
 \examples{
 ## compare the D-statistic for a white noise 

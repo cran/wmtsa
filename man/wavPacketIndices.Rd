@@ -42,8 +42,7 @@ transform in natural order). This function converts such flattened wavelet packe
 the \eqn{W_{j,n}}{W(j,n)} form.
 }
 \seealso{
-\code{\link{wavDWPT}}.
-}
+\code{\link{wavDWPT}}.}
 
 \examples{
 ## specify a basis formed by the flattened indices 

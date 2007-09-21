@@ -27,9 +27,7 @@ series name is found. Default: \code{"x"}.}
 a character string vector containing the result.
 }
 \seealso{
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}}.
-}
+\code{\link{wavDWT}}, \code{\link{wavMODWT}}.}
 
 \examples{
 wavTitle(wavDWT(1:8))

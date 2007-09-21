@@ -139,12 +139,7 @@ Physical Review E, 2001,  64(036301), 12 pages.
 }
 
 \seealso{
-\code{\link{wavEDOF}},
-\code{\link{wavFDP}},
-\code{\link{wavFDPTime}},
-\code{\link{wavFDPBand}},
-\code{\link{wavFDPSDF}}.
-}
+\code{\link{wavEDOF}}, \code{\link{wavFDP}}, \code{\link{wavFDPTime}}, \code{\link{wavFDPBand}}, \code{\link{wavFDPSDF}}.}
 
 \examples{
 ## perform a block-averaged MLE of FD parameters 

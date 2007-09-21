@@ -15,9 +15,10 @@
 \alias{print.summary.wavVar}
 \title{Discrete wavelet variance estimation}
 \concept{waveletwavelet variance}
-\usage{wavVar(x, sdf=NULL, xform="modwt", wavelet= "s8", n.levels=NULL,
+\usage{wavVar(x, xform="modwt", wavelet="s8", n.levels=NULL,
     position=list(from=1,by=1,units=character()), units=character(),
-    documentation=character(), ...)}
+    documentation=character(), sdf=NULL, sdfargs=NULL,
+    sampling.interval=1, n.fft=1024)}
 \description{The discrete wavelet variance is a useful alternative to the
 spectral density function (SDF) and is seen as an octave-band
 regularization of the SDF. The wavelet variance decomposes the
@@ -82,10 +83,12 @@ Similarly, the DWT version of the biased wavelet variance is defined as
 
 \arguments{
 \item{x}{a vector containing a uniformly-sampled real-valued time series.}
-\item{...}{optional arguments passed directly to the SDF function (if supplied).}
-
 \item{documentation}{a character string used to describe the input
 \code{data}. Default: \code{character()}.}
+
+\item{n.fft}{a positive integer (greater than one) defining the number of frequencies to use in evaluating the SDF. The
+frequencies are uniformly distributed over the interval [0, Nyquist] ala f=[0, 1/P , 2/P, 3/P, ..., (n.freq-1)/P]
+where P=2*(n.freq-1)/sampling.interval. Only used when the input SDF is not \code{NULL}. Default: \code{1024}.}
 
 \item{n.levels}{the number of decomposition levels. Default: the
 maximum level at which there exists at least one interior wavelet coefficient.}
@@ -95,20 +98,20 @@ maximum level at which there exists at least one interior wavelet coefficient.}
 \code{data}. All position arguments need not be specified as missing members
 will be filled in by their default values. Default: \code{list(from=1, by=1, units=character())}.}
 
-\item{sdf}{a vector containing a discretized approximation
-of the process spectral density function (SDF). The
-coefficients of this argument should correspond
-exactly with the normalized Fourier frequencies
-\eqn{f=[0, 1/P , 2/P, 3/P, ..., (M-1)/P]}{f=[0, 1/P , 2/P, 3/P, ..., (M-1)/P]}, where
-\eqn{P=2*(M-1)}{P=2*(M-1)} and
-\eqn{M} is the number of points in the SDF
-vector. For example, if the sdf vector contains five
-elements, the corresponding frequencies will be
-\eqn{f=[0$, $1/8$, $1/4$, $3/8$, $1/2]}{f=[0, 1/8, 1/4, 3/8, 1/2]}.
+\item{sampling.interval}{sampling interval of the time series. Default: \code{1}.}
+
+\item{sdf}{a spectral density function of the process corresponding to the input time series.
+This input must be a function whose first argument is \code{f}
+(representing frequency). At a minimum, the SDF must be defined over frequencies [0, Nyquist]
+where \code{Nyquist=1/(2*sampling.interval)}. Additional arguments that are needed to calculate the SDF should
+be passed via the \code{sdfargs} parameter.
 This argument is used only for calculating mode 2 EDOF.
-If the EDOF mode 2 estimates are not desired, specifying a \code{NULL}
-for this argument and the EDOF mode 2 and corresponding confidence
-intervals will not be calculated. Default: \code{NULL}.}
+If the EDOF mode 2 estimates are not desired, specify this
+this argument as \code{NULL} and the EDOF mode 2 and corresponding confidence
+intervals will not be calculated. See the \code{\link[ifultools]{mutilsSDF}} function for more details. Default: \code{NULL}.}
+
+\item{sdfargs}{a list of arguments passed directly to the SDF function ala
+\code{do.call}. Default: \code{NULL} (no additional arguments).}
 
 \item{units}{a string denoting the units of the time series. Default: \code{character()} (no units).}
 
@@ -128,10 +131,7 @@ D. B. Percival and  A. T. Walden,
 }
 
 \seealso{
-\code{\link{wavVarTest}},
-\code{\link{wavEDOF}},
-\code{\link{wavVarConfidence}}.
-}
+\code{\link{wavVarTest}}, \code{\link{wavEDOF}}, \code{\link{wavVarConfidence}}, \code{\link[ifultools]{mutilsSDF}}.}
 
 \examples{
 ## create sequence 

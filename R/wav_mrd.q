@@ -516,8 +516,8 @@
 
   if (n.level < 1)
     stop("Number of wavelet transform decomposition levels must be positive")
-  if ( (reflect && n.level > floor(logb((N-1)/(L-1) + 1, b=2)) ) ||
-        (!reflect && n.level > floor(logb(N, 2)) ) )
+  if ( (reflect && n.level > ilogb((N-1)/(L-1) + 1, base=2) ) ||
+        (!reflect && n.level > ilogb(N, base=2) ) )
      stop("Number of wavelet transform decomposition levels exceeds maximum")
 
   if (reflect){

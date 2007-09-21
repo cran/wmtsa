@@ -1,5 +1,5 @@
 ################################################
-## S+WMTSA wavelet shrinkage functionality
+## WMTSA package wavelet shrinkage functionality
 ##
 ##  Functions:
 ##
@@ -12,7 +12,7 @@
 ###
 
 "wavShrink" <- function(x, wavelet="s8",
-  n.level=as.integer(floor(logb(length(x), 2))),
+  n.level=ilogb(length(x), base=2),
   shrink.fun="hard", thresh.fun="universal", threshold=NULL,
   thresh.scale=1, xform="modwt", noise.variance=-1.0,
   reflect=TRUE)
@@ -50,7 +50,7 @@
 
   if (n.level < 1)
     stop("Number of wavelet transform decomposition levels must be positive")
-  if (n.level > floor(logb(length(x), 2)))
+  if (n.level > ilogb(length(x), base=2))
     stop("Number of wavelet transform decomposition levels exceeds maximum")
 
   # obtain the wavelet and scaling filters. the wavelet argument
@@ -60,10 +60,6 @@
   # initialize length parameters
   L <- length(filters$wavelet)
   N <- length(x)
-
-  #if ((reflect && n.level > floor(logb((N-1)/(L-1) + 1, b=2)) ) ||
-  #      (!reflect && n.level > floor(logb(N, 2))))
-  #  stop("Number of wavelet transform decomposition levels exceeds maximum")
 
   shrfun <- mutilsWSShrinkageFunction(shrink.fun)
   thrfun <- mutilsWSThresholdFunction(thresh.fun)

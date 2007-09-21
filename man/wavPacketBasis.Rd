@@ -46,9 +46,7 @@ DWPT level and the corresponding (ideal) normalized frequency ranges are listed 
 and so forth.}
 }
 \seealso{
-\code{\link{wavDWPT}},
-\code{\link{wavBestBasis}}.
-}
+\code{\link{wavDWPT}}, \code{\link{wavBestBasis}}.}
 
 \examples{
 ## calculate a 3-level DWPT of the sunspots series 

@@ -37,8 +37,7 @@ Time Series Analysis}, Cambridge University Press, 2000.
 }
 
 \seealso{
-\code{\link{wavDWPT}}.
-}
+\code{\link{wavDWPT}}.}
 
 \examples{
 ## calculate the DWPT of the difference of the 

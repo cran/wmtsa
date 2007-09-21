@@ -139,11 +139,7 @@ T.W. Randolph and Y. Yasui, \emph{Multiscale Processing of Mass Spectrometry Dat
 }
 
 \seealso{
-\code{\link{wavDaubechies}},
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}},
-\code{\link{wavMRD}}.
-}
+\code{\link{wavDaubechies}}, \code{\link{wavDWT}}, \code{\link{wavMODWT}}, \code{\link{wavMRD}}.}
 
 \examples{
 ## create a MODWT-based MRD of the sunspots series 

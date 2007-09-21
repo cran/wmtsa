@@ -28,7 +28,7 @@ point for a chi-squared distribution with n degrees of freedom  distribution.}
 \arguments{
 \item{wvar}{a vector containing the block-averaged unbiased wavelet variance estimates.}
 
-\item{edof}{a vector containing the equivalent degrees of freedom estimates. See \code{wavEDOF} for details.}
+\item{edof}{a vector containing the equivalent degrees of freedom estimates. See \code{\link{wavEDOF}} for details.}
 \item{probability}{the probability desired for the confidence
 intervals. Supported probabilities are 0.005, .025, .05, .95, .975, and .995. Default: \code{0.95}.}
 }
@@ -43,9 +43,7 @@ D. B. Percival and  A. T. Walden,
 }
 
 \seealso{
-\code{\link{wavVar}},
-\code{\link{wavEDOF}}.
-}
+\code{\link{wavVar}}, \code{\link{wavEDOF}}.}
 
 \examples{
 ## first calculate the EDOF for the ocean series 

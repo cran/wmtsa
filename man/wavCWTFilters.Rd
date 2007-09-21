@@ -48,8 +48,7 @@ Time Series Analysis}, Cambridge University Press, 2000.
 }
 
 \seealso{
-\code{\link{wavCWT}}.
-}
+\code{\link{wavCWT}}.}
 
 \examples{
 ## set the plot grid 

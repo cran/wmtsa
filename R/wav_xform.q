@@ -60,6 +60,7 @@
   checkScalarType(wavelet,"character")
   checkScalarType(shift,"numeric")
   checkScalarType(variance,"numeric")
+  checkRange(n.scale, c(1,Inf))
 
   # obtain series name
   series.name <- deparse(substitute(x))
@@ -74,8 +75,12 @@
 
   # create a vector of log2-spaced scales over the specified range of scale
   octave <- logb(scale.range, 2)
-  scale  <- 2^c(octave[1] + seq(0, n.scale - 2) * diff(octave) /
-    (floor(n.scale) - 1), octave[2])
+  scale  <- ifelse1(n.scale > 1, 2^c(octave[1] + seq(0, n.scale - 2) * diff(octave) /
+    (floor(n.scale) - 1), octave[2]), scale.range[1])
+
+  # project the scale vector onto a uniform grid of sampling interval width
+  scale <- unique(round(scale / sampling.interval) * sampling.interval)
+  n.scale <- length(scale)
 
   # check scale range
   if (abs(min(scale) - sampling.interval) > .Machine$double.eps)
@@ -103,7 +108,7 @@
   # 5: gaussian2, sombrero, mexican hat
   # 6: morlet
   # 7: haar
-  filter  <- mutilsFilterTypeContinuous(wavelet)
+  filter <- mutilsFilterTypeContinuous(wavelet)
 
   if (filter == 4){
     filter.arg <- sqrt(variance)
@@ -140,6 +145,11 @@
     COPY=rep(FALSE, 5),
     CLASSES=c("numeric", "numeric", "integer", "numeric", "numeric"),
     PACKAGE="ifultools")
+
+  # if the impulse response of the waveleyt filter is purely real
+  # then transform CWT coefficients to purely real as well
+  if (wavelet != "morlet")
+    z <- Re(z)
 
   # assign attributes
   attr(z, "scale")       <- scale
@@ -375,10 +385,7 @@
   # costs is a list containing the DWPT costs
   # in W(0,0), W(1,0), W(1,1), W(2,0), ..., W(J,2^J-1) order
   # costs is a list containing the DWPT costs
-  n.level <- as.integer(logb(length(costs) + 1, 2) - 1)
-
-  if (length(costs) != 2^(n.level + 1) - 1)
-    stop("Length of costs vector not representative of a wavelet packet transform")
+  n.level <- ilogb(length(costs), base=2)
 
   # flatten costs into vector
   costs <- unlist(costs)
@@ -447,7 +454,7 @@
  }
 
  x     <- which(basis > 0)-1
- level <- as.integer(floor(logb(x + 1, b = 2)))
+ level <- ilogb(x + 1, base=2)
  osc   <- x - 2^level + 1
 
  # repack costs into list
@@ -460,7 +467,7 @@
 # wavDWPT
 ##
 
-"wavDWPT" <- function(x, wavelet="s8", n.levels=as.integer(floor(logb(length(x),base=2))),
+"wavDWPT" <- function(x, wavelet="s8", n.levels=ilogb(length(x), base=2),
   position=list(from=1,by=1,units=character()), units=character(),
   title.data=character(), documentation=character())
 {
@@ -533,7 +540,7 @@
 # wavDWT
 ###
 
-"wavDWT" <- function(x, n.levels=as.integer(floor(logb(length(x),base=2))),
+"wavDWT" <- function(x, n.levels=ilogb(length(x), base=2),
   wavelet="s8", position=list(from=1,by=1,units=character()), units=character(),
   title.data=character(), documentation=character(), keep.series=FALSE)
 {
@@ -624,7 +631,7 @@
 # wavMODWPT
 ###
 
-"wavMODWPT" <- function(x, wavelet="s8", n.levels=as.integer(floor(logb(length(x),base=2))),
+"wavMODWPT" <- function(x, wavelet="s8", n.levels=ilogb(length(x), base=2),
   position=list(from=1,by=1,units=character()), units=character(),
   title.data=character(), documentation=character())
 {
@@ -701,7 +708,7 @@
 # wavMODWT
 ###
 
-"wavMODWT" <- function(x, wavelet="s8", n.levels=as.integer(floor(logb(length(x),base=2))),
+"wavMODWT" <- function(x, wavelet="s8", n.levels=ilogb(length(x), base=2),
 	 position=list(from=1,by=1,units=character()), units=character(),
 	 title.data=character(), documentation=character(), keep.series=FALSE)
 {
@@ -754,7 +761,7 @@
     N <- length(x)
 
     if (N > L)
-      n.levels <- as.integer(floor(logb(((N - 1) / (L - 1) + 1), base=2)))
+      n.levels <- ilogb(((N - 1) / (L - 1) + 1), base=2)
     else if (N > 0)
       n.levels <- 1
     else
@@ -1612,7 +1619,7 @@
   flatIndex <- function(j,n, index.base=1) 2^j - 1 + n + index.base
 
   # obtain level and osc
-  level <- as.integer(floor(logb(x+1,b=2)))
+  level <- ilogb(x+1, base=2)
   osc   <- x - 2^level + 1
 
   # check for wavelet packet basis

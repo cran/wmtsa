@@ -403,8 +403,7 @@
 # wavEDOF
 ###
 
-"wavEDOF" <- function(x, wavelet="s8", levels=NULL,
-	sdf.=NULL, sdfargs=NULL, sampling.interval=1)
+"wavEDOF" <- function(x, wavelet="s8", levels=NULL, sdf=NULL, sdfargs=NULL, sampling.interval=1, n.fft=1024)
 {
   if (is(x,"wavTransform")){
 
@@ -433,20 +432,8 @@
     # map filters
     filter <- mutilsFilterType(x$dictionary$wavelet)
 
-    # calculate sdf function over appropriate range of frequencies
-    # such that f=[0, 1/P , 2/P, 3/P, ..., (M-1)/P] where P=2*(M-1)
-    if (!is.null(sdf.)){
-
-      # if sdf is a function, convert the function name to a string
-      if (class(sdf.) == "function")
-        sdf. <- deparse(substitute(sdf.,2))
-
-      num.fourier <- 1024
-      Fourier     <- seq(from=0, by=1 / (2 * num.fourier - 1), length=num.fourier)
-      Sx          <- do.call(sdf., c(list(f=Fourier/sampling.interval), sdfargs))
-    }
-    else
-      Sx <- -1.0
+    # evaluate input SDF over frequencies [0, Nyquist]
+    Sx <- mutilsSDF(sdf, sdfargs=sdfargs, n.freq=n.fft, sampling.interval=sampling.interval)
 
     # adjust for case where there are no interior coefficients
     # at a given level
@@ -472,8 +459,8 @@
       CLASSES=c("numeric","integer","numeric","integer","numeric","integer","integer"),
       PACKAGE="ifultools")
 
-	  edof <- lapply(edof,
-	    function(x,crystals){
+    edof <- lapply(edof,
+      function(x,crystals){
         y <- as.vector(x)
         names(y) <- crystals
         invisible(y)}, crystals=crystals)
@@ -494,19 +481,19 @@
   }
   else if (is.element(class(x), c("numeric","ts","rts","signalSeries"))){
 
-	  y <- create.signalSeries(x)
-	  dt <- y@positions@by
+    y <- create.signalSeries(x)
+    dt <- y@positions@by
 
     if (is.null(levels))
-      n.levels <- as.integer(floor(logb(length(y),base=2)))
+      n.level <- ilogb(length(y),base=2)
     else
-      n.levels <- as.integer(max(levels))
+      n.level <- as.integer(max(levels))
 
-    xform <- wavMODWT(y, wavelet=wavelet, n.levels=n.levels)
-    return(wavEDOF(xform, sdf.=sdf., levels=levels, sampling=dt))
+    xform <- wavMODWT(y, wavelet=wavelet, n.level=n.level)
+    return(wavEDOF(xform, sdf=sdf, levels=levels, sampling.interval=dt, sdfargs=sdfargs))
   }
   else{
-   	stop("Class of input is unsupported")
+    stop("Class of input is unsupported")
   }
 }
 
@@ -525,18 +512,15 @@
 # Constructor: wavVar
 ###
 
-"wavVar" <- function(x, sdf=NULL, xform="modwt", wavelet="s8", n.levels=NULL,
+"wavVar" <- function(x, xform="modwt", wavelet="s8", n.levels=NULL,
   position=list(from=1,by=1,units=character()), units=character(),
-  documentation=character(), ...)
+  documentation=character(), sdf=NULL, sdfargs=NULL, sampling.interval=1, n.fft=1024)
 {
-  # store ... variables
-  sdfargs <- list(...)
-
   # get the series name from the parent
   # (or from this function if this is called as a top level function)
   series.name <- deparse(substitute(x))
   series <- create.signalSeries(x, position=position, units=units,
-			 title.data=series.name, documentation=documentation)
+  title.data=series.name, documentation=documentation)
 
   # map filters
   filter <- mutilsFilterType(wavelet)
@@ -544,26 +528,8 @@
   if (is.null(n.levels))
     n.levels <- wavMaxLevel(n.taps=filter$length, n.sample=length(x), xform=xform)
 
-  # calculate sdf function over appropriate range of frequencies
-  # such that f=[0, 1/P , 2/P, 3/P, ..., (M-1)/P] where P=2*(M-1)
-  if (!is.null(sdf)){
-
-    # if sdf is a function, convert the function name to a string
-    num.fourier <- 1024
-    Fourier     <- seq(from=0, by=1 / (2 * num.fourier - 1), length=num.fourier)
-
-    if(class(sdf) == "function")
-	    Sx <- do.call(deparse(ifelse1(is.R(), substitute(sdf),substitute(sdf,2))),
-	      c(list(f=Fourier/series@positions@by), sdfargs))
-    else if (is.character(sdf))
-      Sx <- do.call(sdf, c(list(f=Fourier/series@positions@by), sdfargs))
-    else
-      stop("Unsupported SDF class")
-
-  }
-  else{
-    Sx <- 1:2
-  }
+  # evaluate input SDF over frequencies [0, Nyquist]
+  Sx <- mutilsSDF(sdf=sdf, sdfargs=sdfargs, n.freq=n.fft, sampling.interval=deltat(x))
 
   type <- mutilsTransformType(xform)
 
@@ -601,15 +567,15 @@
   if (is.conf){
 
     conf <- lapply(obj[[3]], function(x,crystals){
-	    low  <- x[1,]
+      low  <- x[1,]
       high <- x[2,]
 
       names(low)  <- crystals
       names(high) <- crystals
 
-	    return(list(low=low,high=high))
-	  },
-	  crystals=crystals)
+      return(list(low=low,high=high))
+    },
+    crystals=crystals)
 
     names(conf) <- paste("n",1:3,sep="")
 
@@ -624,10 +590,10 @@
 
     edof <- lapply(obj[[4]],
       function(x,crystals){
-	      y <- as.vector(x)
-	      names(y) <- crystals
-	      return(y)
-	      }, crystals=crystals)
+        y <- as.vector(x)
+        names(y) <- crystals
+        return(y)
+        }, crystals=crystals)
     names(edof) <- paste("EDOF",1:3,sep="")
   }
   else{
@@ -662,14 +628,14 @@
     series=series,
     sampling.interval=sampling.interval)
 
-  result <- c(wvar, list(confidence=c(edof,conf,list(length=unbiased.length))))
+  z <- c(wvar, list(confidence=c(edof,conf,list(length=unbiased.length))))
 
   if (is.null(sdf))
-    result$confidence$EDOF2 <- NA
+    z$confidence$EDOF2 <- NA
 
-  oldClass(result) <- "wavVar"
+  oldClass(z) <- "wavVar"
 
-  return(result)
+  z
 }
 
 ###
@@ -905,7 +871,7 @@
     EDOF2.data  <- unlist(round(confidence$EDOF2[unbiased.crystals]))
     EDOF3.data  <- unlist(round(confidence$EDOF3[unbiased.crystals]))
     length.data <- unlist(confidence$length[unbiased.crystals])
-    level.data  <- logb(scale.data/sampling.interval, base=2) + 1
+    level.data  <- ilogb(scale.data/sampling.interval, base=2) + 1
 
     conf.mat <- rbind(level.data, scale.data,
 		      EDOF1.data, EDOF2.data,EDOF3.data,
@@ -963,7 +929,7 @@
   n.repetition=3, tolerance=1e-6)
 {
   # define local functions
-  "is.dyadic" <- function(x) as.logical(2^logb(x,2) == x && x > 0)
+  "is.dyadic" <- function(x) as.logical(2^ilogb(x,base=2) == x && x > 0)
 
   "D.wavebound" <- function(x, good.crystals)
   {

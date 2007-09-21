@@ -86,11 +86,7 @@ Physical Review E, 2001,  64(036301), 12 pages.
 }
 
 \seealso{
-\code{\link{wavFDP}},
-\code{\link{wavFDPBlock}},
-\code{\link{wavFDPBand}},
-\code{\link{wavFDPSDF}}.
-}
+\code{\link{wavFDP}}, \code{\link{wavFDPBlock}}, \code{\link{wavFDPBand}}, \code{\link{wavFDPSDF}}.}
 
 \examples{
 ## perform a unbiased instantaneous LSE of FD 

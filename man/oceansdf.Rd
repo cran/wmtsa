@@ -24,8 +24,7 @@ a numeric vector containing the values of ocean SDF function evaluated at
 the specified normalized frequencies.
 }
 \seealso{
-\code{\link{ocean}}.
-}
+\code{\link{ocean}}.}
 
 \examples{
 oceansdf(c(0.25,0.375))

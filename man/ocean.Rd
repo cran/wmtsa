@@ -20,11 +20,7 @@ meters. This series was collected and supplied by Mike Gregg, Applied
 Physics Laboratory, University of Washington.}
 
 \seealso{
-\code{\link{nile}},
-\code{\link{atomclock}},
-\code{\link{ecg}},
-\code{\link{fdp045}}.
-}
+\code{\link{nile}}, \code{\link{atomclock}}, \code{\link{ecg}}, \code{\link{fdp045}}.}
 
 \examples{
 plot(ocean)

@@ -11,8 +11,8 @@
 \alias{wavEDOF}
 \title{Equivalent degrees of freedom (EDOF) estimates for a chi-squared distribution}
 \concept{waveletwavelet varianceequivalent degrees of freedom}
-\usage{wavEDOF(x, wavelet="s8", levels=NULL,
-    sdf.=NULL, sdfargs=NULL, sampling.interval=1)}
+\usage{wavEDOF(x, wavelet="s8", levels=NULL, sdf=NULL, sdfargs=NULL,
+    sampling.interval=1, n.fft=1024)}
 \description{Let X be a collection of M uncorrelated zero mean Gaussian random variables (RVs).
 The sum of the squares of the RVs in X will obey a scaled chi-square distribution
 with M degrees of freedom (DOF). If, however, the original Gaussian RVs are (partially)
@@ -58,28 +58,28 @@ gain function and the spectral density function of \eqn{X_t}{X(t)}.}
 See references for more details.}
 
 \arguments{
-\item{x}{an object of class \code{WaveletTransform} or a vector containing a uniformly-sampled real-valued time series.}
+\item{x}{an object of class \code{wavTransform} or a vector containing a uniformly-sampled real-valued time series.}
 \item{levels}{a vector containing the decomposition levels. Default: when
-\code{x} is of class \code{WaveletTransform} then \code{levels} is set to \code{1:n.level}, otherwise
+\code{x} is of class \code{wavTransform} then \code{levels} is set to \code{1:n.level}, otherwise
 \code{levels} is set to \code{1:J}, where \code{J} is the
 maximum wavelet transform level in which there exists at least one interior wavelet coefficient.}
 
+\item{n.fft}{a positive integer (greater than one) defining the number of frequencies to use in evaluating the SDF for
+EDOF 2 calculations. The
+frequencies are uniformly distributed over the interval [0, Nyquist] ala f=[0, 1/P , 2/P, 3/P, ..., (n.freq-1)/P]
+where P=2*(n.freq-1)/sampling.interval. Only used when the input SDF is not \code{NULL}. Default: \code{1024}.}
+
 \item{sampling.interval}{sampling interval of the time series. Default: \code{1}.}
 
-\item{sdf.}{a vector containing a discretized approximation
-of the process spectral density function (SDF). The
-coefficients of this argument should correspond
-exactly with the normalized Fourier frequencies
-\eqn{f=[0, 1/P , 2/P, 3/P, ..., (M-1)/P],}{f=(0, 1/P , 2/P, 3/P, ..., (M-1)/P),} where
-\eqn{P=2*(M-1)}{P=2*(M-1)} and
-\eqn{M} is the number of points in the SDF
-vector. For example, if the sdf vector contains five
-elements, the corresponding frequencies will be
-\eqn{f=[0, 1/8, 1/4, 3/8, 1/2]}{f=(0, 1/8, 1/4, 3/8, 1/2)}.
+\item{sdf}{a spectral density function of the process corresponding to the input time series.
+This input must be a function whose first argument is \code{f}
+(representing frequency). At a minimum, the SDF must be defined over frequencies [0, Nyquist]
+where \code{Nyquist=1/(2*sampling.interval)}. Additional arguments that are needed to calculate the SDF should
+be passed via the \code{sdfargs} parameter.
 This argument is used only for calculating mode 2 EDOF.
 If the EDOF mode 2 estimates are not desired, specify this
 this argument as \code{NULL} and the EDOF mode 2 and corresponding confidence
-intervals will not be calculated. Default: \code{NULL}.}
+intervals will not be calculated. See the \code{\link[ifultools]{mutilsSDF}} function for more details. Default: \code{NULL}.}
 
 \item{sdfargs}{a list of arguments passed directly to the SDF function ala
 \code{do.call}. Default: \code{NULL} (no additional arguments).}
@@ -99,14 +99,34 @@ D. B. Percival and  A. T. Walden,
 }
 
 \seealso{
-\code{\link{wavVar}},
-\code{\link{wavVarConfidence}}.
-}
+\code{\link{wavVar}}, \code{\link{wavVarConfidence}}, \code{\link[ifultools]{mutilsSDF}}.}
 
 \examples{
-## calculate the EDOF estimates for the ocean 
-## series 
-wavEDOF(ocean)
+## initialize variables 
+n.level <- 9
+wavelet <- "d6"
+N       <- 4096
+phi     <- 0.9
+
+## define input SDF 
+S <- function(f, phi)  1/(1 + phi^2 - 2*phi*cos(2*pi*f))
+sdfarg <- list(phi=phi)
+
+## create series and MODWT 
+set.seed(100)
+x <- rnorm(N)
+W <- wavMODWT(x, wavelet=wavelet, n.level=n.level)
+
+## calculate EDOF using the wavTransform object 
+z1 <- wavEDOF(W, sdf=S, sdfarg=sdfarg)
+print(z1)
+
+## calculate EDOF using original time series 
+z2 <- wavEDOF(x, wavelet=wavelet, levels=seq(n.level), sdf=S, sdfarg=sdfarg)
+print(z2)
+
+## compare the two approaches 
+print(all.equal(z1,z2))
 }
 \keyword{distribution}
 

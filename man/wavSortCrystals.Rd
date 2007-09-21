@@ -24,9 +24,7 @@ then by corresponding frequency content, from low to high.}
 a vector of character strings containing the sorted crystal names.
 }
 \seealso{
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}}.
-}
+\code{\link{wavDWT}}, \code{\link{wavMODWT}}.}
 
 \examples{
 W <- wavMODWT(1:100)

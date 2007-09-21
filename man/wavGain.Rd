@@ -56,8 +56,7 @@ Communications on Pure and, Applied Mathematics, 41, 909--96.
 }
 
 \seealso{
-\code{\link{wavDaubechies}}.
-}
+\code{\link{wavDaubechies}}.}
 
 \examples{
 ## approximate the gain functions for the 

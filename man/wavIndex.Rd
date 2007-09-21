@@ -33,9 +33,7 @@ D. B. Percival and  A. T. Walden,
 }
 
 \seealso{
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}}.
-}
+\code{\link{wavDWT}}, \code{\link{wavMODWT}}.}
 
 \examples{
 ## calculate the coefficient indices for a MODWT 

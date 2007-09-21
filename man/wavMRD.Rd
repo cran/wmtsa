@@ -139,11 +139,7 @@ D. B. Percival and  A. T. Walden,
 }
 
 \seealso{
-\code{\link{wavMRDSum}},
-\code{\link{reconstruct}},
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}}.
-}
+\code{\link{wavMRDSum}}, \code{\link{reconstruct}}, \code{\link{wavDWT}}, \code{\link{wavMODWT}}.}
 
 \examples{
 ## calculate various wavelet transforms of the 

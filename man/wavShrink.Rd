@@ -12,7 +12,7 @@
 \title{Nonlinear denoising via wavelet shrinkage}
 \concept{nonlinear noise reductionwavelet}
 \usage{wavShrink(x, wavelet="s8",
-    n.level=as.integer(floor(logb(length(x), 2))),
+    n.level=ilogb(length(x), base=2),
     shrink.fun="hard", thresh.fun="universal", threshold=NULL,
     thresh.scale=1, xform="modwt", noise.variance=-1.0,
     reflect=TRUE)}
@@ -227,10 +227,7 @@ Time Series Analysis}, Cambridge University Press, 2000.
 }
 
 \seealso{
-\code{\link{wavDaubechies}},
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}}.
-}
+\code{\link{wavDaubechies}}, \code{\link{wavDWT}}, \code{\link{wavMODWT}}.}
 
 \examples{
 ## MODWT waveshrinking using various thresh.scale 

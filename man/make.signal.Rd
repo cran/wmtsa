@@ -34,9 +34,7 @@ signal to noise ratio of the output. Default: \code{Inf} (no noise).}
 a vector of numeric values containing the resulting test series.
 }
 \seealso{
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}}.
-}
+\code{\link{wavDWT}}, \code{\link{wavMODWT}}.}
 
 \examples{
 nms <- c("blocks", "linchirp", "mishmash1", "bumps")

@@ -105,10 +105,7 @@ D. B. Percival and  A. T. Walden,
 }
 
 \seealso{
-\code{\link{wavVar}},
-\code{\link{wavDWT}},
-\code{\link{D.table}}.
-}
+\code{\link{wavVar}}, \code{\link{wavDWT}}, \code{\link{D.table}}.}
 
 \examples{
 ## perform a homogeneity of variance test for a 

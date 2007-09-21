@@ -48,9 +48,7 @@ Cambridge, England: Cambridge University Press, 2001.
 }
 
 \seealso{
-\code{\link{wavDWPT}},
-\code{\link{wavDWPTWhitest}}.
-}
+\code{\link{wavDWPT}}, \code{\link{wavDWPTWhitest}}.}
 
 \examples{
 ## wavestrap the sunspots series 

@@ -23,11 +23,7 @@ resulting in a sampling interval of 1 day. The amplitude units
 are expressed in microseconds.}
 
 \seealso{
-\code{\link{nile}},
-\code{\link{ocean}},
-\code{\link{ecg}},
-\code{\link{fdp045}}.
-}
+\code{\link{nile}}, \code{\link{ocean}}, \code{\link{ecg}}, \code{\link{fdp045}}.}
 
 \examples{
 plot(atomclock)

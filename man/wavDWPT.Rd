@@ -11,7 +11,7 @@
 \alias{wavDWPT}
 \title{The discrete wavelet packet transform (DWPT)}
 \concept{waveletwavelet packetstransforms, wavelet packets}
-\usage{wavDWPT(x, wavelet="s8", n.levels=as.integer(floor(logb(length(x),base=2))),
+\usage{wavDWPT(x, wavelet="s8", n.levels=ilogb(length(x), base=2),
     position=list(from=1,by=1,units=character()), units=character(),
     title.data=character(), documentation=character())}
 \description{Given \eqn{j, n, t} are the decomposition level,
@@ -68,15 +68,7 @@ D. B. Percival and  A. T. Walden,
 }
 
 \seealso{
-\code{\link{wavBestBasis}},
-\code{\link{wavPacketBasis}},
-\code{\link{reconstruct}},
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}},
-\code{\link{wavMODWPT}},
-\code{\link{wavDaubechies}},
-\code{\link{wavMaxLevel}}.
-}
+\code{\link{wavBestBasis}}, \code{\link{wavPacketBasis}}, \code{\link{reconstruct}}, \code{\link{wavDWT}}, \code{\link{wavMODWT}}, \code{\link{wavMODWPT}}, \code{\link{wavDaubechies}}, \code{\link{wavMaxLevel}}.}
 
 \examples{
 ## calculate the DWPT of sunspots series out to 3 

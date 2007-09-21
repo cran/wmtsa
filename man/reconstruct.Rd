@@ -33,10 +33,7 @@ Communications on Pure and, Applied Mathematics, 41, 909--96.
 }
 
 \seealso{
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}},
-\code{\link{wavMRD}}.
-}
+\code{\link{wavDWT}}, \code{\link{wavMODWT}}, \code{\link{wavMRD}}.}
 
 \examples{
 ## create a random series, calculate a forward 

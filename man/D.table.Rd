@@ -92,8 +92,7 @@ D. B. Percival and  A. T. Walden,
 }
 
 \seealso{
-\code{\link{D.table.critical}}.
-}
+\code{\link{D.table.critical}}.}
 
 \examples{
 D.lookup <- D.table(significance=c(10,5,1)/100,

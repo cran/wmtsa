@@ -72,8 +72,7 @@ extracted. Default: \code{NULL} (no data).}
 an object of class \code{signalSeries}.
 }
 \seealso{
-\code{\link{make.signal}}.
-}
+\code{\link{make.signal}}.}
 
 \examples{
 ## convert an explicitly developed numeric vector 

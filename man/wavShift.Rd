@@ -44,10 +44,7 @@ Communications on Pure and, Applied Mathematics, 41, 909--96.
 }
 
 \seealso{
-\code{\link{wavZeroPhase}},
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}}.
-}
+\code{\link{wavZeroPhase}}, \code{\link{wavDWT}}, \code{\link{wavMODWT}}.}
 
 \examples{
 ## plot the zero phase shifted MODWT of a linear 

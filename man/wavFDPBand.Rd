@@ -100,11 +100,7 @@ D. B. Percival and  A. T. Walden,
 }
 
 \seealso{
-\code{\link{wavFDPBlock}},
-\code{\link{wavFDPTime}},
-\code{\link{wavVar}},
-\code{\link{wavFDPSDF}}.
-}
+\code{\link{wavFDPBlock}}, \code{\link{wavFDPTime}}, \code{\link{wavVar}}, \code{\link{wavFDPSDF}}.}
 
 \examples{
 ## calculate the mid-octave SDF values for an FD 

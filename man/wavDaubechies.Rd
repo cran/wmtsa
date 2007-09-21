@@ -97,11 +97,7 @@ Communications on Pure and, Applied Mathematics, 41, 909--96.
 }
 
 \seealso{
-\code{\link{wavGain}},
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}},
-\code{\link{wavMODWPT}}.
-}
+\code{\link{wavGain}}, \code{\link{wavDWT}}, \code{\link{wavMODWT}}, \code{\link{wavMODWPT}}.}
 
 \examples{
 ## obtain Daubechies least asymmetric 8-tap filter 

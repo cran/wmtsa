@@ -24,8 +24,7 @@ inherited function without alteration and with the original names preserved.}
 a vector of character strings.
 }
 \seealso{
-\code{\link{wavMRD}}.
-}
+\code{\link{wavMRD}}.}
 
 \examples{
 methods(crystal.names)

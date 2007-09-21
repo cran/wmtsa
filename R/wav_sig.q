@@ -264,7 +264,7 @@
    levelshift=as.numeric(x >= 0.25 & x < 0.39),
    patches={
      if(n<16) stop("n must be >= 16 to generate patches\n")
-     J <- floor(logb(n, 2.))
+     J <- ilogb(n, base=2)
      y <- rep(0., n)
      for(j in 0:(J-4.)) y[(1:2^j)+3.*2.^(j+2.)] <- 1.
      y

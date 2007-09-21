@@ -289,7 +289,7 @@
 
     if (!biased){
       if (N > L)
-        n.levels <- floor(logb(((N - 1) / (L - 1) + 1), base=2))
+        n.levels <- ilogb(((N - 1) / (L - 1) + 1), base=2)
       else if (N > 0)
         n.levels <- 1
       else stop("length of time series must be positive")

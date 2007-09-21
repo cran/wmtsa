@@ -46,10 +46,7 @@ D. B. Percival and  A. T. Walden,
 }
 
 \seealso{
-\code{\link{wavFDPBand}},
-\code{\link{wavFDPBlock}},
-\code{\link{wavFDPTime}}.
-}
+\code{\link{wavFDPBand}}, \code{\link{wavFDPBlock}}, \code{\link{wavFDPTime}}.}
 
 \examples{
 ## create a normalized frequency vector 

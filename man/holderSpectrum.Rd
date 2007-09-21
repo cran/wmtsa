@@ -12,11 +12,11 @@
 \title{The Holder spectrum of a time series}
 \concept{Holder spectrumsingularity detection}
 \usage{holderSpectrum(chains, n.scale.min=3, fit=lmsreg)}
-\description{Using a WTMM tree, this function returns time localized  exponent
+\description{Using a  tree, this function returns time localized  exponent
 estimations for a given time series.}
 
 \arguments{
-\item{chains}{a list containing information regarding the WTMM chains as output by the \code{wtmmTree} function.
+\item{chains}{a list containing information regarding the WTMM chains as output by the \code{wavCWTTree} function.
 Each element of the list is itself a list containing the named elements \code{"time"}, \code{"scale"}, and \code{"wtmm"}
 corresponding to the location of the current chain in time, in scale, and its corresponding WTMM value, respectively.}
 \item{fit}{a linear regression function to use in fitting the resulting data. Default: \code{lmsreg}.}
@@ -83,10 +83,7 @@ J.F. Muzy, E. Bacry, and A. Arneodo, ``The multifractal formalism revisited with
 }
 
 \seealso{
-\code{\link{wavCWT}},
-\code{\link{wavCWTFilters}},
-\code{\link{wtmmTree}}.
-}
+\code{\link{wavCWT}}, \code{\link{wavCWTFilters}}, \code{\link{wavCWTTree}}.}
 
 \examples{
 ## calculate the CWT of a random walk series and 
@@ -99,7 +96,7 @@ plot(x.cwt, series=TRUE)
 
 ## create a WTMM tree and plot the first 50 
 ## branches found 
-x.tree <- wtmmTree(x.cwt)
+x.tree <- wavCWTTree(x.cwt)
 plot(x.tree[1:50])
 
 ## estimate and plot the Holder spectrum 

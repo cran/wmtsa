@@ -73,9 +73,7 @@ Cambridge, England: Cambridge University Press, 2001.
 }
 
 \seealso{
-\code{\link{wavDWPT}},
-\code{\link{wavBootstrap}}.
-}
+\code{\link{wavDWPT}}, \code{\link{wavBootstrap}}.}
 
 \examples{
 ## calculate the DWPT of the sunspots series 

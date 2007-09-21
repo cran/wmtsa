@@ -245,41 +245,45 @@
   }
 
   # map filter number and obtain length
-  filter <- mutilsFilterType(wavelet=wavelet)
+  filter <- wavDaubechies(wavelet=wavelet, normalize=normalize)
+  L      <- length(filter$wavelet)
+  npad   <- max(L, n.fft)
 
-  # the C code includes the zeroth level so to achieve
-  # n.levels beyond the zeroth level we must increment
-  # n.levels by one
-  n.levels <- n.levels
+  # form impulse response of wavelet and scaling filter
+  g <- h <- rep(0, npad)
+  g[seq(L)] <- filter$scaling
+  h[seq(L)] <- filter$wavelet
 
-  # calculate the gain functions
-  gain <- .Call("RS_wavelets_filters_daubechies_gain",
-    filter$type,
-    filter$length,
-    n.levels,
-    n.fft,
-    normalize,
-    COPY=rep(FALSE,5),
-    CLASSES=c("integer","integer","integer","integer","logical"),
-    PACKAGE="ifultools")
+  # form gain functions for wavelet and scaling filter
+  # set as first row of the output matrix
+  G <- H <- matrix(0+0i, nrow=n.levels, ncol=npad)
+  G[1,] <- fft(g, inverse=FALSE)
+  H[1,] <- fft(h, inverse=FALSE)
 
-  # parse the results
-  f     <- gain[[1]]
-  H.all <- gain[[2]]
-  G.all <- gain[[3]]
+  # define Fourier frequencies
+  df <- 1 / npad
+  f  <- seq(0, npad-1) * df
+
+  # form gain functions for remaining levels
+  for (j in seq(2,n.levels)){
+
+     fj <- as.integer(((2^(j-1) * f) %% 1) / df) + 1
+     G[j,] <- G[1,fj] * G[j-1,]
+     H[j,] <- H[1,fj] * G[j-1,]
+  }
 
   # name the matrix components
-  levnames        <- list(paste("Level", (1:n.levels)), f)
-  dimnames(G.all) <- levnames
-  dimnames(H.all) <- levnames
+  levnames    <- list(paste("Level", seq(n.levels)), f)
+  dimnames(G) <- levnames
+  dimnames(H) <- levnames
 
   # create return object (list)
-  z <- list(gain=list(low=G.all, high=H.all),
-	  sqrgain= list(low=abs(G.all)^2, high=abs(H.all)^2),
-	  frequency=f,
-	  wavelet=wavelet,
-	  n.levels=n.levels,
-	  normalize=normalize)
+  z <- list(gain=list(low=G, high=H),
+    sqrgain= list(low=abs(G)^2, high=abs(H)^2),
+    frequency=f,
+    wavelet=wavelet,
+    n.levels=n.levels,
+    normalize=normalize)
 
   # define class
   oldClass(z) <- "wavGain"

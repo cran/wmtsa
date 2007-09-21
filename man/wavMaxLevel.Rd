@@ -31,10 +31,7 @@ an integer denoting the maximum decomposition level which
 contains more than one interior wavelet coefficient.
 }
 \seealso{
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}},
-\code{\link{wavDWPT}}.
-}
+\code{\link{wavDWT}}, \code{\link{wavMODWT}}, \code{\link{wavDWPT}}.}
 
 \examples{
 wavMaxLevel(n.taps=8, n.sample=1024, xform="modwt")

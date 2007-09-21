@@ -1,14 +1,18 @@
 ######################################################
-## S+Fractal Holder spectrum functionality
+## WMTSA package Holder spectrum functionality
 ##
 ##   holderSpectrum
+##   wavCWTPeaks
 ##
-## Class: wtmmTree
-## Constructor function: wtmmTree
+## Class: wavCWTTree
+## Constructor function: wavCWTTree
 ## Methods:
 ##
-##   [.wtmmTree
-##   plot.wtmmTree
+##   [.wavCWTTree
+##   plot.wavCWTTree
+##   print.summary.wavCWTTree
+##   print.wavCWTTree
+##   summary.wavCWTTree
 ##
 ######################################################
 
@@ -28,7 +32,7 @@
 
     times    <- chains[[i]]$time
     logscale <- logb(chains[[i]]$scale, base=2)
-    logwtmm  <- logb(chains[[i]]$wtmm, base=2)
+    logwtmm  <- logb(chains[[i]]$extrema, base=2)
 
     if (length(logscale) > 1){
 
@@ -67,14 +71,13 @@
 }
 
 ###
-# wtmmTree
+# wavCWTTree
 ###
 
-"wtmmTree" <- function(x, bridge.gaps=FALSE, strength.min= 0.0,
-  n.octave.min=2, tolerance=0.0, border=FALSE)
+"wavCWTTree" <- function(x, n.octave.min=1, tolerance=0.0, type="maxima")
 {
   # define local functions
-  "WTMM" <- function(x, tolerance=NULL){
+  "WTMM" <- function(x, tolerance=NULL, type="maxima"){
 
     if (!is(x,"wavCWT"))
       stop("Input object must be of class wavCWT")
@@ -108,19 +111,178 @@
       tolerance <- tolerance[1] / sqrt(scales)
 
     wtmmz <- .Call("RS_wavelets_transform_continuous_wavelet_modulus_maxima",
-      as.matrix(x), tolerance,
-      CLASSES=c("matrix","numeric"),
-      COPY=rep(FALSE,2),
+      as.matrix(x)+0i, tolerance, mutilsTransformPeakType(type),
+      CLASSES=c("matrix","numeric","integer"),
+      COPY=rep(FALSE,3),
       PACKAGE="ifultools")
 
-    itime  <- as.vector(wtmmz[[1]]) + 1
-    iscale <- as.vector(wtmmz[[2]]) + 1
+    z <- matrix(0, nrow=nrow(x), ncol=ncol(x))
+    z[matrix(unlist(wtmmz),ncol=2)+1] <- 1
 
-    return(list(time=times[itime],
-      scale =scales[iscale],
-      itime =itime,
-      iscale=iscale,
-      tolerance=tolerance))
+    z
+  }
+
+  "wtmmBranches" <- function(wtmm, extrema.mask, times, scales, span.min=5, gap.max=3, skip=NULL, sampling.interval=1)
+  {
+    # define normalized scales
+    scales <- as.integer(scales / sampling.interval)
+
+    n.scale <- ncol(extrema.mask)
+    n.sample <- nrow(extrema.mask)
+
+    if (is.null(scales))
+      scales <- 1:n.scale
+
+    iwtmm <- which(extrema.mask[, n.scale] > 0)
+
+    # scan from large to small scale
+    iscale <- seq(n.scale-1,1,-1)
+
+    tree <- as.list(iwtmm)
+    names(tree) <- iwtmm
+    peakStatus <- as.list(rep(0, length(iwtmm)))
+    names(peakStatus) <- iwtmm
+    orphanRidgeList <- NULL
+    orphanRidgeName <- NULL
+
+    n.level <- length(iscale)
+
+    for (j in seq(n.level)){
+
+      iscale.j <- iscale[j]
+      scale.j <- scales[iscale.j]
+
+      if (length(iwtmm) == 0){
+          iwtmm <- which(extrema.mask[, iscale.j] > 0)
+          next
+      }
+
+      span <- scale.j * 2 + 1
+
+      if (span < span.min)
+        span <- span.min
+
+      remove.j <- selPeak.j <- NULL
+
+      # loop through each point in the current scale's WTMM
+      for (k in seq(along=iwtmm)){
+
+        # define search range in the time index
+        itime <- iwtmm[k]
+        itime.start <- itime - span
+        if (itime.start < 1)
+          itime.start <- 1
+        itime.end <- itime + span
+        if (itime.end > n.sample)
+          itime.end <- n.sample
+        itime.candidates <- which(extrema.mask[itime.start:itime.end, iscale.j] > 0) + itime.start - 1
+
+        if (length(itime.candidates) == 0){
+
+            status.k <- peakStatus[[as.character(itime)]]
+
+            if (status.k > gap.max & scale.j >= 2){
+              temp            <- tree[[as.character(itime)]]
+              orphanRidgeList <- c(orphanRidgeList, list(temp[1:(length(temp) - status.k)]))
+              orphanRidgeName <- c(orphanRidgeName, paste(iscale.j + status.k + 1, itime, sep="_"))
+              remove.j        <- c(remove.j, as.character(itime))
+              next
+            }
+            else {
+              itime.candidates <- itime
+              peakStatus[[as.character(itime)]] <- status.k + 1
+            }
+        }
+        else {
+          peakStatus[[as.character(itime)]] <- 0
+          if (length(itime.candidates) >= 2)
+            itime.candidates <- itime.candidates[which.min(abs(itime.candidates - itime))]
+
+        }
+
+        tree[[as.character(itime)]] <- c(tree[[as.character(itime)]], itime.candidates)
+        selPeak.j <- c(selPeak.j, itime.candidates)
+      }
+
+      if (length(remove.j) > 0){
+        bad.tree   <- which(is.element(names(tree), remove.j))
+        tree       <- tree[-bad.tree]
+        peakStatus <- peakStatus[-bad.tree]
+      }
+
+      dupPeak.j <- unique(selPeak.j[duplicated(selPeak.j)])
+
+      if (length(dupPeak.j) > 0){
+
+          bad.tree <- NULL
+
+          for (dupPeak.jk in dupPeak.j){
+            selInd          <- which(selPeak.j == dupPeak.jk)
+            selLen          <- sapply(tree[selInd], length)
+            bad.tree.jk     <- which.max(selLen)
+            bad.tree        <- c(bad.tree, selInd[-bad.tree.jk])
+            orphanRidgeList <- c(orphanRidgeList, tree[bad.tree.jk])
+            orphanRidgeName <- c(orphanRidgeName, paste(iscale.j, selPeak.j[bad.tree.jk], sep="_"))
+          }
+
+          selPeak.j  <- selPeak.j[-bad.tree]
+          tree       <- tree[-bad.tree]
+          peakStatus <- peakStatus[-bad.tree]
+      }
+      names(tree) <- selPeak.j
+      names(peakStatus) <- selPeak.j
+
+      if (scale.j >= 2){
+        maxInd.next      <- which(extrema.mask[, iscale.j] > 0)
+        unSelPeak.j      <- maxInd.next[!is.element(maxInd.next, selPeak.j)]
+        newPeak.j        <- as.list(unSelPeak.j)
+        names(newPeak.j) <- unSelPeak.j
+        tree             <- c(tree, newPeak.j)
+        iwtmm            <- c(selPeak.j, unSelPeak.j)
+        newPeakStatus    <- as.list(rep(0, length(newPeak.j)))
+        names(newPeakStatus) <- newPeak.j
+        peakStatus       <- c(peakStatus, newPeakStatus)
+      }
+      else {
+        iwtmm <- selPeak.j
+      }
+    }
+
+    names(tree) <- paste(1, names(tree), sep="_")
+    names(orphanRidgeList) <- orphanRidgeName
+    tree <- c(tree, orphanRidgeList)
+    tree <- lapply(tree, rev)
+    tree <- tree[unique(names(tree))]
+
+    tree <- lapply(seq(along=tree), function(i, tree, iscale.min, times, scales, wtmm){
+      itime <- tree[[i]]
+      iscale <- seq(iscale.min[i], length=length(itime))
+      list(itime=itime, iscale=iscale, time=times[itime], scale=scales[iscale], extrema=wtmm[cbind(itime,iscale)])
+    },
+    tree=tree,
+    iscale.min=as.integer(gsub("_.*","",names(tree))),
+    times=times,
+    scales=scales*sampling.interval,
+    wtmm=wtmm)
+
+    # remove any redundant branches
+    iflat <- lapply(tree, function(x, nr) (x$iscale-1)*nr + x$itime, nr=nrow(wtmm))
+
+    flatset <- iflat[[1]]
+    bad <- NULL
+
+    for (i in seq(2,length(iflat))){
+
+       if (any(is.element(iflat[[i]], flatset)))
+         bad <- c(bad, i)
+       else
+         flatset <- c(flatset, iflat[[i]])
+    }
+
+    if (length(bad) > 0)
+      tree <- tree[-bad]
+
+    tree
   }
 
   # obtain attributes
@@ -131,83 +293,101 @@
   sampling.interval <- x.attr$sampling.interval
   border.times <- range(times) + sampling.interval * c(1,-1)
 
-  # locate the the WTMM in the CWT matrix
-  wtmm <- WTMM(x, tolerance=tolerance)
+  # locate the the extrema in the CWT matrix
+  extrema.mask <- WTMM(x, tolerance=tolerance, type=type)
 
-  # form the WTMM tree
-  tree <- .Call("RS_wavelets_transform_continuous_wavelet_modulus_maxima_tree",
-    as.integer(wtmm$itime - 1), as.integer(wtmm$iscale - 1),
-    as.matrix(x), as.numeric(times), as.numeric(scales),
-    as.logical(bridge.gaps), as.numeric(n.octave.min), as.numeric(strength.min),
-    COPY=rep(FALSE,8),
-    CLASSES=c("integer", "integer", "matrix", "numeric",
-      "numeric", "logical", "numeric", "numeric"),
-    PACKAGE="ifultools")
+  if (!identical(dim(x),dim(extrema.mask)))
+    stop("Input WTMM dimenions do not match those of the input CWT matrix")
 
-  z        <- list()
-  ibranch  <- 1
-  finetime <- NULL
+  # develop WTMM tree
+  z <- wtmmBranches(ifelse1(is.complex(x), Mod(as.matrix(x)), as.matrix(x)), extrema.mask, times, scales, sampling.interval=sampling.interval)
 
-  # prune border branches
-  for (i in seq(tree)){
+  # define minimum number of points needed per branch
+  n.scale  <- length(scales)
+  n.octave <- log2(max(scales) / min(scales))
+  n.voice  <- (n.scale - 1) / n.octave
+  n.scale.min <- as.integer(n.voice * n.octave.min)
 
-    branch <- tree[[i]]
-    n.link <- ncol(branch)
-    itime  <- as.integer(branch[1,]) + 1
-
-    if (!border){
-
-      # if the difference between successive times is (say)
-      # greater than 1/4 the range of times, then the branch
-      # is circularly wrapped in time. As the data is stored
-      # from long to short scales, remove the longer scale data
-      # of the wrapped branch by removing the first portion of
-      # the corresponding vectors
-      ibad  <- which(abs(diff(itime)) > n.sample/4)
-      istart <- ifelse1(length(ibad) > 0, min(ibad[1] + 1, n.link), 1)
-    }
-    else
-      istart <- 1
-
-    igood <- seq(istart, n.link)
-
-    z[[ibranch]] <- list(itime=itime[igood],
-      iscale=as.integer(branch[2,igood]) + 1,
-      time=branch[3,igood],
-      scale=branch[4,igood],
-      wtmm=branch[5,igood])
-
-    finetime[ibranch] <- branch[3, n.link]
-    ibranch <- ibranch + 1
-  }
-
-  # sort branch list with respect to time
-  endtime <- finetime[1:(ibranch-1)]
-  isort   <- order(endtime)
-
+  good <- which(unlist(lapply(z,function(x, n.scale.min) length(x[[1]]) > n.scale.min, n.scale.min=n.scale.min)))
+  z <- z[good]
+  endtime <- unlist(lapply(z,function(x,iscale) x$itime[iscale], iscale=which.min(scales)))
+  isort <- order(endtime)
   z <- z[isort]
 
   names(z) <- seq(z)
-  attr(z, "endtime") <- endtime[isort]
-  attr(z, "time")  <- times
-  attr(z, "scale") <- scales
-  attr(z, "wtmm")  <- wtmm
 
-  oldClass(z) <- "wtmmTree"
+  attr(z, "iendtime")     <- endtime[isort]
+  attr(z, "endtime")      <- times[endtime[isort]]
+  attr(z, "time")         <- times
+  attr(z, "scale")        <- scales
+  attr(z, "extrema.mask") <- extrema.mask
+  attr(z, "noise")        <- x[,1]
+  attr(z, "branch.hist")  <- colSums(extrema.mask*abs(x))
+  attr(z, "wavelet")      <- attr(x,"wavelet")
+  attr(z, "filter.arg")   <- attr(x,"filter.arg")
+  attr(z, "series.name")  <- attr(x,"series.name")
+  attr(z, "series")       <- attr(x,"series")
+  attr(z, "sampling.interval") <- attr(x,"sampling.interval")
+
+  oldClass(z) <- "wavCWTTree"
 
   z
 }
 
 ###
-# plot.wtmmTree
+# [.wavCWTTree
 ###
 
-"plot.wtmmTree" <- function(x, add=FALSE, pch="o",  label=TRUE, log.="y",
-  xlab=NULL, ylab=NULL, wtmm=FALSE, zoom=NULL,
+"[.wavCWTTree" <- function(x, i, ..., time=NULL, range=NULL)
+{
+  ax    <- attributes(x)
+  times <- ax$endtime
+
+  if (!missing(range)){
+
+    if (length(range) == 2){
+
+      i <- which(times >= range[1] & times <= range[2])
+    }
+    else{
+      i <- seq(length(x))
+    }
+  }
+  else if(!missing(time)){
+
+    i <- sort(time)
+
+    min.scale <- median(diff(times))
+
+    itime <- NULL
+
+    for (j in i){
+
+      itime <- c(itime, which(times >= j - min.scale & times <= j + min.scale))
+    }
+
+    i <- itime
+  }
+
+  i <- i[i <= length(x) & i >= 1]
+
+  z <- oldUnclass(x)[i]
+
+  attributes(z) <- c(attributes(z),
+    ax[ setdiff(names(ax), c("names", "dim", "dimnames")) ])
+
+  z
+}
+
+###
+# plot.wavCWTTree
+###
+
+"plot.wavCWTTree" <- function(x, add=FALSE, pch="o",  label=TRUE, log.="y",
+  xlab=NULL, ylab=NULL, extrema=FALSE, zoom=NULL,
   fit=FALSE, models= c("lm", "lmsreg", "ltsreg"),
   cex=0.8, col.skip=max(1,round(256/length(x))),  ...)
 {
-
   branches <- names(x)
 
   if (!length(x))
@@ -241,14 +421,20 @@
       if (i > 1)
         splitplot(nrow,ncol,i,gap=gap)
 
-      x.branch <- rev(log(x[[i]]$scale))
-      y.branch <- rev(log(x[[i]]$wtmm))
-      breaks   <- linearSegmentation(x.branch, y.branch)
+      x.branch <- log(x[[i]]$scale)
+      y.branch <- log(x[[i]]$extrema)
+
+      if (x.branch[length(x.branch)] < x.branch[1]){
+        x.branch <- rev(x.branch)
+        y.branch <- rev(y.branch)
+      }
+
+      breaks <- linearSegmentation(x.branch, y.branch)
 
       if (is.null(breaks))
         breaks <- length(x.branch)
 
-      plot(x.branch, y.branch, xlab="log(scale)", ylab="log(|WTMM|)", type="b",
+      plot(x.branch, y.branch, xlab="log(scale)", ylab="log(|EXTREMA|)", type="b",
         pch="o", cex=cex)
 
       abline(v=x.branch[breaks], lty=2, xpd=FALSE)
@@ -298,24 +484,29 @@
       mtext(paste("Branch", branches[i]), adj=1, cex=0.85, line=0.5)
     }
 
-    return(NULL)
+    return(invisible(NULL))
   }
 
   if (!add)
     frame()
 
   x.attr <- attributes(x)
-  x.wtmm <- x.attr$wtmm
 
-  if (wtmm){
-    data <- scaleZoom(x.wtmm$time, x.wtmm$scale, zoom=zoom, log=log., xy.linked=TRUE,
+  if (extrema){
+
+    pch <- 20
+    col <- "blue"
+
+    mask <- which(x.attr$extrema.mask == 1, arr.ind=TRUE)
+
+    data <- scaleZoom(x.attr$time[mask[,1]], x.attr$scale[mask[,2]], zoom=zoom, logxy=log., xy.linked=TRUE,
       xlab="Time", ylab="Scale")
     if (!add)
-      plot(data$x, data$y, col=6, pch="o", xlab=data$xlab, ylab=data$ylab, ...)
+      plot(data$x, data$y, col=col, pch=pch, xlab=data$xlab, ylab=data$ylab, cex=cex, ...)
     else
-      points(data$x, data$y, col=6, pch="o", ...)
+      points(data$x, data$y, col=col, pch=pch, cex=cex, ...)
 
-    return(NULL)
+    return(invisible(NULL))
   }
 
   if (!add){
@@ -342,6 +533,9 @@
     plot(times, scales, type="n", xlab=xlab, ylab=ylab)
   }
 
+  col <- c("black","red","blue","green","deeppink","orange","cyan","magenta","violet","navy","purple",
+     "yellowgreen","orangered","goldenrod","cornflowerblue","plum","steelblue","tomato","pink")
+
   for (i in seq(along=x)){
 
     times  <- x[[i]]$time
@@ -352,61 +546,194 @@
     if(is.element(log., "x"))
       times <- logb(times, base=2)
 
+    icol <- ((i-1) %% length(col)) + 1
+
     if (label){
 
       imaxscale <- order(scales)[length(scales)]
-      lines(times[-imaxscale], scales[-imaxscale], col=i*col.skip, pch=pch,
-        cex=0.5, type="b", ...)
-      text(times[imaxscale], scales[imaxscale], as.character(branches[i]),
-        cex=1, col=i*col.skip)
+      lines(times[-imaxscale], scales[-imaxscale], col=col[icol], pch=pch, cex=0.5, type="b", ...)
+      text(times[imaxscale], scales[imaxscale], as.character(branches[i]), cex=1, col=col[icol])
     }
     else
-      lines(times, scales, col=i, lty=1, pch=pch, ...)
+      lines(times, scales, col=col[icol], lty=1, pch=pch, ...)
   }
 
   invisible(NULL)
 }
 
+
 ###
-# [.wtmmTree
+# print.summary.wavCWTTree
 ###
 
-"[.wtmmTree" <- function(x, i, ..., time=NULL, range=NULL)
+"print.summary.wavCWTTree" <- function(x, digits=max(2, .Options$digits - 4), ...)
 {
-  ax    <- attributes(x)
-  times <- ax$endtime
+  oldOptions <- options(digits = digits)
+  on.exit(options(oldOptions))
+  NextMethod("print")
+  invisible(x)
 
-  if (!missing(range)){
+#  print(round(data.frame(oldUnclass(x)), digits), ...)
+#  invisible(x)
+}
 
-    if (length(range) == 2){
+###
+# print.wavCWTTree
+###
 
-      i <- which(times >= range[1] & times <= range[2])
-    }
-    else{
-      i <- seq(length(x))
-    }
+"print.wavCWTTree" <- function(x, justify="left", sep=":", ...)
+{
+  # obtain attributes
+  xatt       <- attributes(x)
+  times      <- xatt$time
+  name       <- xatt$series.name
+  scale      <- xatt$scale
+  n.scale    <- length(scale)
+  series     <- xatt$series
+  sampling.interval <- xatt$sampling.interval
+  n.branch   <- length(x)
+  filter.arg <- xatt$filter.arg
+
+  # pretty print strings
+  waveletstr <- "Mexican Hat (Gaussian, second derivative)"
+  filtcat1 <- "Wavelet variance"
+  filtval1 <- filter.arg^2
+
+  if (is(series, "signalSeries")){
+    units.time <- series@units.position
+    if (length(units.time) > 0)
+      filtval1 <- paste(filtval, " (", units.time, ")", sep="")
   }
-  else if(!missing(time)){
 
-    i <- sort(time)
+  scale.range <- range(scale)
 
-    min.scale <- median(diff(times))
+  main <- paste("Continuous Wavelet Transform Tree of", name)
 
-    itime <- NULL
+  z <- list(
+    "Wavelet"=waveletstr,
+    "Wavelet variance"=filtval1,
+    "Length of series"=length(series),
+    "Sampling interval"=sampling.interval,
+    "Number of scales"=n.scale,
+    "Range of scales"=paste(scale.range[1], "to", scale.range[2]),
+    "Number of branches"=n.branch
+  )
 
-    for (j in i){
+  prettyPrintList(z, header=main, sep=sep, justify=justify, ...)
 
-      itime <- c(itime, which(times >= j - min.scale & times <= j + min.scale))
-    }
+  invisible(x)
+}
 
-    i <- itime
-  }
+###
+# summary.wavCWTTree
+###
 
-  z <- oldUnclass(x)[i]
+"summary.wavCWTTree" <- function(object, ...)
+{
+  z <- data.frame(do.call("rbind",lapply(object, function(x){
 
-  attributes(z) <- c(attributes(z),
-    ax[ setdiff(names(ax), c("names", "dim", "dimnames")) ])
+    scale <- x$scale
+    ext <- x$extrema
+
+    c(x$time[which.min(scale)], length(x$time), log2(max(scale) / min(scale)), range(ext), mean(ext), sd(ext), var(ext), mad(ext))})))
+
+  names(z) <- c("End Time", "Length", "Octaves", "Min", "Max", "Mean", "SD", "Var", "MAD")
+
+  oldClass(z) <- c("summary.wavCWTTree","data.frame")
 
   z
 }
 
+###
+# wavCWTPeaks
+###
+
+"wavCWTPeaks" <- function(x, snr.min=3, scale.range=NULL, length.min=10,
+  noise.span=NULL, noise.fun="quantile", noise.min=NULL)
+{
+  if (!is(x,"wavCWTTree"))
+   stop("Input must be an object of class wavCWTTree")
+
+  xatt <- attributes(x)
+  endtimes  <- attr(x, "endtime")
+  times     <- attr(x, "time")
+  scale     <- attr(x, "scale")
+  noise     <- attr(x, "noise")
+  wavelet   <- attr(x,"wavelet")
+  series    <- attr(x,"series")
+  branch.hist <- attr(x, "branch.hist")
+  sampling.interval <- abs(diff(times[1:2]))
+
+  if (!is.element(wavelet,"gaussian2"))
+    stop("Only CWT developed using the Mexican hat (gaussian2) filter are supported")
+
+  if (is.null(noise.min))
+    noise.min <- quantile(abs(attr(x,"noise")), prob=0.05)
+
+  # define default scale range
+  if (is.null(scale.range))
+    scale.range <- scale[range(which(branch.hist > quantile(branch.hist,prob=0.8)))]
+
+  # define default noise span
+  if (is.null(noise.span))
+    noise.span <- max(0.01 * diff(range(times)), 5*sampling.interval)
+
+  # obtain local noise estimates around the termination time of each branch
+  noise.levels <- unlist(lapply(endtimes, function(x, noise.fun, times, times.range, noise, noise.min, noise.span){
+    time.start <- x - noise.span
+    if (time.start < times.range[1])
+      time.start <- times.range[1]
+    time.end <- x + noise.span
+    if (time.end < times.range[2])
+      time.end <- times.range[2]
+
+    ix <- which(times >= time.start & times <= time.end)
+    noise.local <- noise.fun(abs(noise[ix]))
+    if (noise.local < noise.min)
+      noise.local <- noise.min
+
+    noise.local
+   },
+   noise.fun=switch(noise.fun, quantile=function(x){quantile(x, probs=0.95)}, sd=sd, mad=function(x){mad(x, center=0)}),
+   times=times,
+   times.range=range(times),
+   noise=noise,
+   noise.min=noise.min,
+   noise.span=noise.span))
+
+  peaks <- data.frame(do.call("rbind", lapply(x, function(x) unlist(lapply(x, function(x, imax) x[imax], imax=which.max(x$extrema))))))
+  peaks <- cbind(data.frame(branch=row.names(peaks)), peaks, data.frame(iendtime=attr(x,"iendtime")))
+  peak.snr <- peaks[["extrema"]] / noise.levels
+  peak.scale <- peaks[["scale"]]
+
+  branch.lengths <- unlist(lapply(x, function(x, scale.range)
+    length(which(x$scale >= scale.range[1] & x$scale <= scale.range[2])),
+    scale.range=scale.range))
+
+  # prune branches
+  #
+  #  good.snr    : estimate of SNR at peak value is greater than or equal to the specified snr.min
+  #  good.scale  : the scale of the peak is larger than the minimum of the specified scale range
+  #  good.length : the length of the branch within the scale.range is greater than or equal to the specified minimum length.min
+  #  good.end    : the index of the terminating time of the branch is on the interval (W, N-W), where N is the length of the time
+  #                series and W is integer equivalent of 1/4 the length of the noise span or 3, whichever is greater.
+  good.snr     <- peak.snr >= snr.min
+  good.scale   <- peak.scale >= scale.range[1]
+  good.length  <- branch.lengths >= length.min
+  iendtime.min <- max(as.integer(noise.span / sampling.interval / 4),3)
+  iendtime.max <- length(times) - iendtime.min + 1
+  good.end     <- peaks[["iendtime"]] > iendtime.min & peaks[["iendtime"]] < iendtime.max
+
+  peaks <- peaks[which(good.snr & good.scale & good.length & good.end),]
+  row.names(peaks) <- as.character(seq(nrow(peaks)))
+
+  z <- list(x=times[peaks$iendtime], y=series[peaks$iendtime])
+  attr(z,"peaks")       <- peaks
+  attr(z,"snr.min")     <- snr.min
+  attr(z,"scale.range") <- scale.range
+  attr(z,"length.min")  <- length.min
+  attr(z,"noise.span")  <- noise.span
+  attr(z,"noise.fun")   <- noise.fun
+  attr(z,"noise.min")   <- noise.min
+  z
+}

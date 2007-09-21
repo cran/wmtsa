@@ -42,11 +42,7 @@ Communications on Pure and, Applied Mathematics, 41, 909--96.
 }
 
 \seealso{
-\code{\link{wavIndex}},
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}},
-\code{\link{wavShift}}.
-}
+\code{\link{wavIndex}}, \code{\link{wavDWT}}, \code{\link{wavMODWT}}, \code{\link{wavShift}}.}
 
 \examples{
 ## calculate the MODWT of the sunspots series 

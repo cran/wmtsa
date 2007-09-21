@@ -18,11 +18,7 @@ and supplied by Dr. G. Bardy M.D. and Dr. P. Reinhall of the
 University of Washington.}
 
 \seealso{
-\code{\link{nile}},
-\code{\link{atomclock}},
-\code{\link{ocean}},
-\code{\link{fdp045}}.
-}
+\code{\link{nile}}, \code{\link{atomclock}}, \code{\link{ocean}}, \code{\link{fdp045}}.}
 
 \examples{
 plot(ecg)

@@ -23,11 +23,7 @@ inherited function without alteration and with the original names preserved.}
 \note{An extended data analysis plot is shown.}
 
 \seealso{
-\code{\link{wavMRD}},
-\code{\link{wavTransform}},
-\code{\link{eda.plot}},
-\code{\link{crystal.names}}.
-}
+\code{\link{wavMRD}}, \code{\link{wavTransform}}, \code{\link{eda.plot}}, \code{\link{crystal.names}}.}
 
 \examples{
 methods(wavStackPlot)

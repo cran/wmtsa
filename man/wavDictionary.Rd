@@ -77,9 +77,7 @@ Used internally by the \code{wavMODWT} and \code{wavDWT} functions
 to package the transform contents into a dictionary list.
 }
 \seealso{
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}}.
-}
+\code{\link{wavDWT}}, \code{\link{wavMODWT}}.}
 
 \examples{
 ## create a faux wavelet dictionary 

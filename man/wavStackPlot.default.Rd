@@ -61,8 +61,7 @@ the user should not call this function directly and, rather, shoudl rely on the 
 of \code{wavTransform} objects.
 }
 \seealso{
-\code{\link{wavTransform}}.
-}
+\code{\link{wavTransform}}.}
 
 \examples{
 wavStackPlot.default(wavMODWT(sunspots)$data)

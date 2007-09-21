@@ -18,9 +18,7 @@ rejecting or accepting a linear cumulative energy hypothesis. The table
 is generated for an ensemble of distribution probabilities and sample sizes.}
 
 \seealso{
-\code{\link{D.table}},
-\code{\link{D.statistic}}.
-}
+\code{\link{D.table}}, \code{\link{D.statistic}}.}
 
 \examples{
 D.table.critical[1:10,]

@@ -100,9 +100,7 @@ estimator condition.}
 }
 
 \seealso{
-\code{\link{wavFDPBlock}},
-\code{\link{wavFDPTime}}.
-}
+\code{\link{wavFDPBlock}}, \code{\link{wavFDPTime}}.}
 
 \examples{
 ## create a faux dictionary 

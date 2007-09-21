@@ -11,7 +11,7 @@
 \alias{wavDWT}
 \title{The discrete wavelet transform (DWT)}
 \concept{wavelettransforms, discrete wavelet}
-\usage{wavDWT(x, n.levels=as.integer(floor(logb(length(x),base=2))),
+\usage{wavDWT(x, n.levels=ilogb(length(x), base=2),
     wavelet="s8", position=list(from=1,by=1,units=character()), units=character(),
     title.data=character(), documentation=character(), keep.series=FALSE)}
 \description{The discrete wavelet transform using convolution style filtering
@@ -81,17 +81,7 @@ D. B. Percival and  A. T. Walden,
 }
 
 \seealso{
-\code{\link{reconstruct}},
-\code{\link{wavDaubechies}},
-\code{\link{wavMODWT}},
-\code{\link{wavMODWPT}},
-\code{\link{wavMRD}},
-\code{\link{wavDictionary}},
-\code{\link{wavIndex}},
-\code{\link{wavTitle}},
-\code{\link{wavBoundary}},
-\code{\link{wavShrink}}.
-}
+\code{\link{reconstruct}}, \code{\link{wavDaubechies}}, \code{\link{wavMODWT}}, \code{\link{wavMODWPT}}, \code{\link{wavMRD}}, \code{\link{wavDictionary}}, \code{\link{wavIndex}}, \code{\link{wavTitle}}, \code{\link{wavBoundary}}, \code{\link{wavShrink}}.}
 
 \examples{
 ## calculate the DWT of linear chirp 

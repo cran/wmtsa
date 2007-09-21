@@ -139,15 +139,7 @@ Used internally by the \code{wavMODWT} and \code{wavDWT} functions
 to package the transform contents into a list.
 }
 \seealso{
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}},
-\code{\link{wavDWPT}},
-\code{\link{wavMODWPT}},
-\code{\link{wavBoundary}},
-\code{\link{wavSortCrystals}},
-\code{\link{wavPacketIndices}},
-\code{\link{wavShrink}}.
-}
+\code{\link{wavDWT}}, \code{\link{wavMODWT}}, \code{\link{wavDWPT}}, \code{\link{wavMODWPT}}, \code{\link{wavBoundary}}, \code{\link{wavSortCrystals}}, \code{\link{wavPacketIndices}}, \code{\link{wavShrink}}.}
 
 \examples{
 ## calculate a MODWT of the sunpots series and 

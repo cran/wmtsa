@@ -11,7 +11,7 @@
 \alias{wavMODWT}
 \title{The maximal overlap discrete wavelet transform (MODWT)}
 \concept{wavelettransforms, maximal overlap discrete wavelet}
-\usage{wavMODWT(x, wavelet="s8", n.levels=as.integer(floor(logb(length(x),base=2))),
+\usage{wavMODWT(x, wavelet="s8", n.levels=ilogb(length(x), base=2),
     position=list(from=1,by=1,units=character()), units=character(),
     title.data=character(), documentation=character(), keep.series=FALSE)}
 \description{Let \eqn{j, t} be the decomposition level,
@@ -86,15 +86,7 @@ D. B. Percival and  A. T. Walden,
 }
 
 \seealso{
-\code{\link{reconstruct}},
-\code{\link{wavDaubechies}},
-\code{\link{wavDWT}},
-\code{\link{wavMODWPT}},
-\code{\link{wavDictionary}},
-\code{\link{wavIndex}},
-\code{\link{wavTitle}},
-\code{\link{wavBoundary}}.
-}
+\code{\link{reconstruct}}, \code{\link{wavDaubechies}}, \code{\link{wavDWT}}, \code{\link{wavMODWPT}}, \code{\link{wavDictionary}}, \code{\link{wavIndex}}, \code{\link{wavTitle}}, \code{\link{wavBoundary}}.}
 
 \examples{
 ## calculate the MODWT of linear chirp 

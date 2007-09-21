@@ -15,11 +15,7 @@
 level of the Nile over the years 622 to 1284 as recorded at the Roda gauge near Cairo.}
 
 \seealso{
-\code{\link{atomclock}},
-\code{\link{ocean}},
-\code{\link{ecg}},
-\code{\link{fdp045}}.
-}
+\code{\link{atomclock}}, \code{\link{ocean}}, \code{\link{ecg}}, \code{\link{fdp045}}.}
 
 \examples{
 plot(nile)

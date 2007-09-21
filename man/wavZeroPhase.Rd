@@ -43,11 +43,7 @@ D. B. Percival and  A. T. Walden,
 }
 
 \seealso{
-\code{\link{wavDaubechies}},
-\code{\link{wavDWT}},
-\code{\link{wavMODWT}},
-\code{\link{wavShift}}.
-}
+\code{\link{wavDaubechies}}, \code{\link{wavDWT}}, \code{\link{wavMODWT}}, \code{\link{wavShift}}.}
 
 \examples{
 ## calculate the zero phase shift factors for 

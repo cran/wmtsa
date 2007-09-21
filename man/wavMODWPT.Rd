@@ -11,7 +11,7 @@
 \alias{wavMODWPT}
 \title{The maximal overlap discrete wavelet packet transform (MODWPT)}
 \concept{wavelettransforms, maximal overlap discrete wavelet packet}
-\usage{wavMODWPT(x, wavelet="s8", n.levels=as.integer(floor(logb(length(x),base=2))),
+\usage{wavMODWPT(x, wavelet="s8", n.levels=ilogb(length(x), base=2),
     position=list(from=1,by=1,units=character()), units=character(),
     title.data=character(), documentation=character())}
 \description{Given \eqn{j, n, t} are the decomposition level,
@@ -64,15 +64,7 @@ D. B. Percival and  A. T. Walden,
 }
 
 \seealso{
-\code{\link{reconstruct}},
-\code{\link{wavMRD}},
-\code{\link{wavMODWT}},
-\code{\link{wavDWT}},
-\code{\link{wavDWPT}},
-\code{\link{wavDaubechies}},
-\code{\link{wavShift}},
-\code{\link{wavZeroPhase}}.
-}
+\code{\link{reconstruct}}, \code{\link{wavMRD}}, \code{\link{wavMODWT}}, \code{\link{wavDWT}}, \code{\link{wavDWPT}}, \code{\link{wavDaubechies}}, \code{\link{wavShift}}, \code{\link{wavZeroPhase}}.}
 
 \examples{
 ## calculate the MODWPT of sunspots series out to 

@@ -15,11 +15,7 @@
 difference process (FDP) with FDP exponent \eqn{\delta=0.45}{delta=0.45} and a process variance of unity.}
 
 \seealso{
-\code{\link{nile}},
-\code{\link{atomclock}},
-\code{\link{ocean}},
-\code{\link{ecg}}.
-}
+\code{\link{nile}}, \code{\link{atomclock}}, \code{\link{ocean}}, \code{\link{ecg}}.}
 
 \examples{
 plot(fdp045)

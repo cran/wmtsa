@@ -24,7 +24,7 @@
     # this leaves us with 4 coefficients at the last level.
     # (any less and the sample with replacement scheme inherent
     # in the bootstrapping process would not make sense).
-    max.level <- as.integer(floor(logb(length(x), base=2)) - 2)
+    max.level <- ilogb(length(x), base=2) - 2
 
     if (is.null(n.level))
       n.level <- max.level
@@ -74,7 +74,7 @@
     # this leaves us with 4 coefficients at the last level.
     # (any less and the sample with replacement scheme inherent
     # in the bootstrapping process would not make sense).
-    max.level <- floor(logb(length(x), base=2)) - 2
+    max.level <- ilogb(length(x), base=2) - 2
 
     if (is.null(n.level))
       n.level <- max.level
