@@ -218,8 +218,8 @@
 
 "plot.wavBoundary" <- function(x, x.axis=TRUE, y.axis=TRUE, type="l", plot=TRUE, xlab=NULL,
   title=NULL, bars=FALSE, vgap=.05, grid=FALSE, times=NULL, grid.lty=par("lty")+1,
-  same.scale=NULL, zerocenter=FALSE, zeroline=FALSE, col=ifelse1(is.R(),c("red","black"),c(1,6)),
-  bar=list(lty=1, col=ifelse1(is.R(),c("red","black"),c(1,6)), lwd=2), ...)
+  same.scale=NULL, zerocenter=FALSE, zeroline=FALSE, col=c("red","black"),
+  bar=list(lty=1, col=c("red","black"), lwd=2), ...)
 {
   series         <- x$series
   series.omitted <- as.logical(length(series@data)==0)

@@ -1,5 +1,5 @@
 ################################################
-## S+Proteome wavelet functionality
+## WMTSA wavelet functionality
 ##
 ##  Functions:
 ##

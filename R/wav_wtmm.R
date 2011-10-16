@@ -473,22 +473,13 @@
 
       key.cex <- 0.7
 
-      if (is.R()){
-	mdlName <- upperCase(admissible.models)
-	   legend("bottomright",
-           paste(format(mdlName), "\t: slope=", format(round(slope[imodel], 4))),
+      mdlName <- upperCase(admissible.models)
+	  legend("bottomright",
+             paste(format(mdlName), "\t: slope=", format(round(slope[imodel], 4))),
     	     lty=lty[imodel],
     	     lwd=lwd[imodel],
     	     cex=key.cex)
 
-			} else {
-
-	      key(corner=c(1,0),
-	        text=list(upperCase(admissible.models),adj=1, cex=key.cex),
-	        line=list(lty=lty[imodel], lwd=lwd[imodel]),
-	        text=list(paste("Slope :: ", as.character(round(slope[imodel], 4))),
-	        adj=0, cex=key.cex))
-			}
       mtext(paste("Branch", branches[i]), adj=1, cex=0.85, line=0.5)
     }
 
@@ -610,7 +601,7 @@
   if (is(series, "signalSeries")){
     units.time <- series@units.position
     if (length(units.time) > 0)
-      filtval1 <- paste(filtval, " (", units.time, ")", sep="")
+      filtval1 <- paste(filtval1, " (", units.time, ")", sep="")
   }
 
   scale.range <- range(scale)

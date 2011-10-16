@@ -1,5 +1,5 @@
 ################################################
-## S+WMTSA series functionality
+## WMTSA series functionality
 ##
 ##  Functions:
 ##
@@ -117,11 +117,11 @@
         xout=c(from[1],from[length(from)]), method="linear")
 
       # create a time series beginning at same time as ship
-      y <- rts(x=y[from], start=date.range$y[1],
+      y <- ts(data=y[from], start=date.range$y[1],
                frequency=freq.data)
     }
 
-    y <- ts.update(y)
+    #y <- ts.update(y)
 
   }
   else{

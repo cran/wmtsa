@@ -78,11 +78,9 @@
 
     list(significance=significance, n.sample=n.sample)
   }
-  if (is.R())
-    assign("D.table.preprocess", D.table.preprocess)
-  else
-    assign("D.table.preprocess", D.table.preprocess, frame=1)
-
+ 
+  assign("D.table.preprocess", D.table.preprocess)
+ 
   "D.table.names" <- function(n.sample, significance)
   {
     # The D.table.names() function creates the names for the
@@ -93,10 +91,7 @@
     list(method , c("N", paste(significance*100,"%",sep="")))
   }
 
-  if (is.R())
-    assign("D.table.names", D.table.names)
-  else
-    assign("D.table.names", D.table.names, frame=1)
+  assign("D.table.names", D.table.names)
 
   "significance.percentage.to.number" <- function(x)
   {
@@ -349,15 +344,9 @@
 
   dimnames(D) <- D.table.names(n.sample, significance)
 
-  # remove local functions assigned to frame 1
-  if (is.R()){
-    remove("D.table.preprocess")
-    remove("D.table.names")
-  }
-  else{
-    remove("D.table.preprocess", frame=1)
-    remove("D.table.names", frame=1)
-  }
+  # remove local functions
+  remove("D.table.preprocess")
+  remove("D.table.names")
 
   return(D)
 }
@@ -757,36 +746,18 @@
     	  high <- logfunc(conf[[i]]$high)
 
     	  plot(xlim, ylim, type="n", xlab=xlab, ylab=ifelse1(i==1,ylab,""))
-    	  if (is.R()){
+    	  
        	  arrows(xdata, low, xdata, high, code=3, col="black", angle=90, lwd=2, length=0.1)
        	  points(xdata, ydata, pch=19, col="blue", cex=1.5)
-    	  }
-       	else{
-       	  dx <- par("1em")[1]/3
-       	  col <- "black"
-       	  lwd <- 2
-       	  segments(xdata, low, xdata, high, col=col, lwd=lwd)
-       	  segments(xdata - dx, low, xdata + dx, low, col=col, lwd=lwd)
-       	  segments(xdata - dx, high, xdata + dx, high, col=col, lwd=lwd)
-       	  points(xdata, ydata, pch=16, col="blue", cex=1.1)
-       	}
-
+ 
         mtext(paste("EDOF", edof[i]), side=3, adj=1, line=0.5)
     	}
     	else
     	  plot(xdata, ydata, pch=19, col="blue", cex=1.5)
 
-    	if (is.R())
-    	  grid()
-    	else{
-
-    	  xtick <- par("xaxp")
-    	  ytick <- par("yaxp")
-    	  xat <- seq(xtick[1], xtick[2], length=xtick[3]*4+1)
-    	  yat <- seq(ytick[1], ytick[2], length=ytick[3]*4+1)
-        abline(v=xat, h=yat, lty="dotted", col="lightblue")
-    	}
-    }
+    	
+    	grid()
+     }
 
   }
 

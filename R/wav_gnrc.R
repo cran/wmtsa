@@ -37,3 +37,5 @@
 
 "wavStackPlot" <- function(x, ...)
   UseMethod("wavStackPlot")
+
+  

@@ -1,5 +1,5 @@
 ################################################
-## S+WMTSA wavelet dictionary functionality
+## WMTSA wavelet dictionary functionality
 ##
 ##  Constructor Functions and methods:
 ##

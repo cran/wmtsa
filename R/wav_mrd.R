@@ -292,9 +292,7 @@
   else
     names(xe) <- pns
 
-  func <- ifelse1(is.R(), dotchart, dotchart.default)
-
-  func(xe, xlab=xlab, xlim=c(0, 1), new=new, ...)
+  dotchart(xe, xlab=xlab, xlim=c(0, 1), new=new, ...)
   invisible(NULL)
 }
 

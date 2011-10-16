@@ -1,0 +1,139 @@
+############################
+# NAMESPACE file for wmtsa #
+############################
+
+###
+# IMPORTS
+###
+
+importFrom(graphics, boxplot, dotchart)
+
+###
+# S3 Generics
+###
+
+export(crystal.names)
+export(eda.plot)
+export(reconstruct)
+export(wavStackPlot)
+
+###
+# R/sysdata.rda Data
+##
+
+export(atomclock)
+export(D.table.critical)
+export(ecg)
+export(fdp045)
+export(nile)
+export(ocean)
+
+###
+# S3 Functions
+###
+
+export(D.statistic)
+export(D.table)
+export(create.signalSeries)
+export(holderSpectrum)
+export(make.signal)
+export(oceansdf)
+export(wavBestBasis)
+export(wavBootstrap)
+export(wavBoundary)
+export(wavCWT)
+export(wavCWTFilters)
+export(wavCWTPeaks)
+export(wavCWTTree)
+export(wavDWPT)
+export(wavDWPTWhitest)
+export(wavDWT)
+export(wavDaubechies)
+export(wavDictionary)
+export(wavEDOF)
+export(wavFDP)
+export(wavFDPBand)
+export(wavFDPBlock)
+export(wavFDPSDF)
+export(wavFDPTime)
+export(wavGain)
+export(wavIndex)
+export(wavMODWPT)
+export(wavMODWT)
+export(wavMRD)
+export(wavMRDSum)
+export(wavMaxLevel)
+export(wavPacketIndices)
+export(wavPacketBasis)
+export(wavShift)
+export(wavShrink)
+export(wavSortCrystals)
+export(wavStackPlot.default)
+export(wavTitle)
+export(wavTransform)
+export(wavVar)
+export(wavVarConfidence)
+export(wavVarTest)
+export(wavZeroPhase)
+
+###
+# Exported S3 Methods
+###
+
+S3method("[", wavCWTTree)
+S3method("[", wavMRD)
+S3method("[", wavTransform)
+S3method("[<-", wavMRD)
+S3method("[<-", wavTransform)
+S3method("[[", wavMRD)
+S3method("[[", wavTransform)
+S3method(as.list, wavDictionary)
+S3method(as.matrix, wavCWT)
+S3method(as.matrix, wavMRD)
+S3method(as.matrix, wavTransform)
+S3method(boxplot, wavMRD)
+S3method(boxplot, wavTransform)
+S3method(crystal.names, wavMRD)
+S3method(dotchart, wavMRD)
+S3method(eda.plot, wavFDP)
+S3method(eda.plot, wavMRD)
+S3method(eda.plot, wavTransform)
+S3method(plot, wavBoundary)
+S3method(plot, wavCWT)
+S3method(plot, wavCWTTree)
+S3method(plot, wavDaubechies)
+S3method(plot, wavFDP)
+S3method(plot, wavGain)
+S3method(plot, wavMRD)
+S3method(plot, wavTransform)
+S3method(plot, wavTransform.crystal)
+S3method(plot, wavVar)
+S3method(plot, wavVarTest)
+S3method(print, wavBoundary)
+S3method(print, wavCWT)
+S3method(print, wavCWTTree)
+S3method(print, wavDaubechies)
+S3method(print, wavDictionary)
+S3method(print, wavFDP)
+S3method(print, wavGain)
+S3method(print, wavMRD)
+S3method(print, wavTransform)
+S3method(print, wavVar)
+S3method(print, wavVarTest)
+S3method(print, summary.wavCWTTree)
+S3method(print, summary.wavFDP)
+S3method(print, summary.wavVar)
+S3method(print, summary.wavBoundary)
+S3method(print, summary.wavMRD)
+S3method(print, summary.wavTransform)
+S3method(reconstruct, wavMRD)
+S3method(reconstruct, wavTransform)
+S3method(summary, wavBoundary)
+S3method(summary, wavCWTTree)
+S3method(summary, wavFDP)
+S3method(summary, wavMRD)
+S3method(summary, wavTransform)
+S3method(summary, wavVar)
+S3method(wavStackPlot, default)
+S3method(wavStackPlot, wavMRD)
+S3method(wavStackPlot, wavTransform)

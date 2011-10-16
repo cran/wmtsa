@@ -1,5 +1,5 @@
 ################################################
-## S+WMTSA filter functionality
+## WMTSA filter functionality
 ##
 ##  Functions:
 ##
@@ -296,7 +296,7 @@
 # plot.wavGain
 ##
 
-"plot.wavGain" <- function(x, cex.main=ifelse1(is.R(),1,0.85), adj=1, ...)
+"plot.wavGain" <- function(x, cex.main=1, adj=1, ...)
 {
 
   "plot.wavelet.response" <- function(x, frequency, high=TRUE, ylab="", wavestr=NULL, norm=TRUE, cex.main=0.85, adj=1, ...){

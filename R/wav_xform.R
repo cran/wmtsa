@@ -89,12 +89,18 @@
 
   # map the time vector
   if (inherits(x, "signalSeries"))
+  {
     times <- as(x@positions,"numeric")
+    x <- x@data
+  }
   else
+  {
+  
     times <- time(x)
+    x <- as.vector(x)
+  }
 
   # ensure that x is a double vector
-  x <- as.vector(x)
   storage.mode(x) <- "double"
 
   # map the wavelet filter and corresponding argument
@@ -110,19 +116,23 @@
   # 7: haar
   filter <- mutilsFilterTypeContinuous(wavelet)
 
-  if (filter == 4){
+  if (filter == 4)
+  {
     filter.arg <- sqrt(variance)
     wavelet    <- "gaussian1"
   }
-  else if (filter == 5){
+  else if (filter == 5)
+  {
     filter.arg <- sqrt(variance)
     wavelet    <- "gaussian2"
   }
-  else if (filter == 6){
+  else if (filter == 6)
+  {
     filter.arg <- shift
     wavelet    <- "morlet"
   }
-  else if (filter == 7){
+  else if (filter == 7)
+  {
     filter.arg <- 0.0
     wavelet    <- "haar"
 
@@ -133,8 +143,10 @@
     scale <- sampling.interval * unique(round(scale / sampling.interval))
   }
   else
+  {
     stop("Unsupported filter type")
-
+  }
+  
   # calculate the CWT
   z <- .Call("RS_wavelets_transform_continuous_wavelet",
     as.numeric(x),
@@ -264,19 +276,9 @@
 
     if (series){
 
-    	if (is.R()){
-
-            mai <- par("mai")
-            old.fig <- par(fig=c(fig[1:2], 0.8, 0.95), new=TRUE)
-            on.exit(par(old.fig))
-    	}
-    	else{
-          mai <- par("mai")
-
-          old.mai <- par(mai=c(0,mai[2],0,mai[4]), fig=c(fig[1:2],
-            fig[4]-par("mai")[3]/par("din")[2]*0.9, 0.95))
-          on.exit(par(old.mai))
-    	}
+      mai <- par("mai")
+      old.fig <- par(fig=c(fig[1:2], 0.8, 0.95), new=TRUE)
+      on.exit(par(old.fig))
 
       plot(series.time, x.series[itime], type="l", col="blue", axes=TRUE,
         xlim=range(series.time), ylab=series.ylab,xlab="",xaxt="n", xaxs="i")
@@ -291,15 +293,9 @@
 
     data <- scaleZoom(times[itime], scales[iscale], zz[itime,iscale], zoom=NULL, logxy=logxy)
 
-    if (is.R()){
-    	persp(data$x, data$y, data$z,
+    persp(data$x, data$y, data$z,
 	      xlab=xlab, ylab=ylab, zlab="CWT Modulus", theta=theta, phi=phi, ...)
-    }
-    else{
-    	persp(data$x, data$y, data$z,
-	      xlab=xlab, ylab=ylab, zlab="CWT Modulus", ...)
-    }
-  }
+   }
   else
     stop("Unsupported plot type")
 
@@ -342,7 +338,7 @@
     if (is(series, "signalSeries")){
       units.time <- series@units.position
       if (length(units.time) > 0)
-        filtval1 <- paste(filtval, " (", units.time, ")", sep="")
+        filtval1 <- paste(filtval1, " (", units.time, ")", sep="")
     }
   }
 
@@ -1060,7 +1056,7 @@
 # eda.plot.wavTransform
 ###
 
-"eda.plot.wavTransform" <- function(x, data=TRUE, n.top=NULL, cex.main=ifelse1(is.R(),1,0.7), mex=.5,
+"eda.plot.wavTransform" <- function(x, data=TRUE, n.top=NULL, cex.main=1, mex=.5,
   x.legend=NULL, y.legend=NULL, gap=.13, ...)
 {
   old.plt <- splitplot(2,2,1, gap=gap)
@@ -1088,7 +1084,7 @@
 ###
 
 "plot.wavTransform" <- function(x, type="h", plot.bar=TRUE, plot.pie=TRUE,
-  add=FALSE, vgap=0.05, grid=TRUE, grid.lty="dashed", border=TRUE, cex.main=ifelse1(is.R(),1,0.7), ...)
+  add=FALSE, vgap=0.05, grid=TRUE, grid.lty="dashed", border=TRUE, cex.main=1, ...)
 {
   "energy.plot" <- function(x, tit="Energy Distribution", plot.bar=TRUE, plot.pie=TRUE, add=FALSE, cex.main=0.7)
   {
@@ -1136,15 +1132,9 @@
        pie.str <- paste(paste(pie.str, ": ",sep=""),
           round(energy/sum(energy)*100,2),"%",sep="")
 
-       if (is.R()){
-       	pie(energy, labels=pie.str, radius=0.95,
+       pie(energy, labels=pie.str, radius=0.95,
           clockwise=FALSE, col = colors)
-       }
-       else{
-         pie(energy, names=pie.str, size = 0.8,
-           inner = 1.1, col=colors, rotate=FALSE)
-       }
-
+ 
        if (!same.plot)
          title(tit, cex.main=cex.main, adj=1)
      }
@@ -1200,8 +1190,8 @@
 	    ylim=c(0, (n.levels+1)*dy), xlab="", ylab="", ...)
 
     start <- 0
-    em    <- ifelse1(is.R(),par("cxy"),par("1em"))[1]
-    left  <- par("usr")[1] - em
+    em    <- par("cxy")[1L]
+    left  <- par("usr")[1L] - em
 
     for (j in seq(0,n.levels)){
 

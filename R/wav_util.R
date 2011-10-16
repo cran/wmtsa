@@ -1,5 +1,5 @@
 ################################################
-## S+WMTSA utility functionality
+## WMTSA utility functionality
 ##
 ##   oceansdf
 ##   wavMaxLevel

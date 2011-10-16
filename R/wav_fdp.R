@@ -1,5 +1,5 @@
 #############################################################
-## S+WMTSA fractionally differenced process functionality
+## WMTSA fractionally differenced process functionality
 ##
 ##  Functions:
 ##
@@ -55,7 +55,7 @@
         y <- integrate(f=wavFDPSDF, lower=lim.low[j], upper=lim.high[j],
           delta=delta, variance=1, response=NULL)
 
-	      mult.factor[j] * ifelse1(is.R(), y$value, y$integral)
+	      mult.factor[j] * y$value
       },
 	    delta    = delta,
 	    lim.low  = lower.limit,
@@ -63,6 +63,13 @@
       mult.factor = mult.factor)
     )
 
+    "fdpsdf.bandpass.scaling" <- function(n.sample, delta, variance, Cprime)
+    {
+        J <- length(Cprime)
+        levels <- seq_len(J)
+        n.sample * ( variance * gamma(1 - 2 * delta) / gamma(1 - delta)^2 - sum(Cprime / 2^levels) )
+    }
+        
     # now calculate the average SDF value
     # for the scaling coefficient(s) band
     if (scaling){
@@ -604,22 +611,13 @@
     # add a legend
     if (show.key){
 
-    	if (is.R()){
-
     	   legend("bottom",
            c(paste("Delta(t)", refstr, sep=""),"NA Values","95% Confidence          "),
     	     lty=c(1,-1,-1),
     	     pch=c(-1,pch.bad,15),
     	     col=c(1,"red",conf.color),
            cex=1.5)
-    	}
-    	else{
-        key(lines=list(type=c("l","p","p"), pch=c(0,pch.bad,15), col=c(1,8,conf.color)),
-          text=list(c(paste("Delta(t)", refstr, sep=""),"NA Values","95% Confidence          "),adj=0, cex=1),
-          border=1,
-          corner=c(0.5,0),
-          cex=1.5)
-    	}
+    	
     }
   }
   else{
@@ -639,46 +637,23 @@
       # add a legend
       if (show.key){
 
-      	if (is.R()){
-
-    	   legend("bottom",
+     	   legend("bottom",
            c("Delta(t)","NA Values", paste("Reference delta:", mean.delta,"               ")),
     	     lty=c(1,1,2),
     	     pch=c(-1,pch.bad,-1),
     	     col=c(1,"red",conf.color),
            cex=1.5)
-    	  }
-    	  else{
-
-          key(lty=0,
-            lines=list(type=c("l","p","l"), pch=c(0,pch.bad,0), lty=c(1,1,2), col=c(1,8,3)),
-            text=list(c("Delta(t)","NA Values", paste("Reference delta:", mean.delta,"               ")), adj=0, cex=1),
-            border=1,
-            corner=c(0.5,0),
-            cex=1.5)
-    	  }
-      }
+       }
     }
     else{
       if (show.key){
 
-      	if (is.R()){
-
-    	   legend("bottom",
+     	   legend("bottom",
            c("Delta(t)","NA Values"),
     	     lty=c(1,-1),
     	     pch=c(-1,pch.bad),
     	     col=c(1,"red"),
            cex=1.5)
-    	  }
-    	  else{
-
-          key(lines=list(type=c("l","p"), pch=c(0,pch.bad), lty=c(1,1), col=c(1,8)),
-            text=list(c("Delta(t)","NA Values"), adj=0, cex=1),
-            border=1,
-            corner=c(0.5,0),
-            cex=1.5)
-    	  }
       }
     }
   }
