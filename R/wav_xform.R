@@ -148,15 +148,16 @@
   }
   
   # calculate the CWT
-  z <- .Call("RS_wavelets_transform_continuous_wavelet",
+  z <- itCall("RS_wavelets_transform_continuous_wavelet",
     as.numeric(x),
     as.numeric(sampling.interval),
     as.integer(filter),
     as.numeric(filter.arg),
-    as.numeric(scale),
-    COPY=rep(FALSE, 5),
-    CLASSES=c("numeric", "numeric", "integer", "numeric", "numeric"),
-    PACKAGE="ifultools")
+    as.numeric(scale))
+    #
+    #COPY=rep(FALSE, 5),
+    #CLASSES=c("numeric", "numeric", "integer", "numeric", "numeric"),
+    #PACKAGE="ifultools")
 
   # if the impulse response of the waveleyt filter is purely real
   # then transform CWT coefficients to purely real as well
@@ -474,7 +475,7 @@
   checkScalarType(wavelet,"character")
 
   # obtain the wavelet and scaling filters
-  filters <- wavDaubechies(wavelet=wavelet, normalize=FALSE)
+  filters <- wavDaubechies(wavelet=wavelet, normalized=FALSE)
 
   # set the default number of decomposition levels
   # to be the largest scale at which there exists
@@ -500,13 +501,14 @@
     title.data=title.data, documentation=documentation)
 
   # calculate the transform
-  data <- .Call("RS_wavelets_transform_packet",
+  data <- itCall("RS_wavelets_transform_packet",
     as.numeric(x),
     list(filters$wavelet,filters$scaling),
-    as.integer(n.levels),
-    COPY=rep(FALSE,3),
-    CLASSES=c("numeric","list","numeric"),
-    PACKAGE="ifultools")
+    as.integer(n.levels))
+    #
+    #COPY=rep(FALSE,3),
+    #CLASSES=c("numeric","list","numeric"),
+    #PACKAGE="ifultools")
 
   # convert each object from a matrix to a vector
   data <- lapply(data, as.vector)
@@ -560,17 +562,14 @@
     documentation=documentation)
 
   # map filter number and obtain length
-  filters <- wavDaubechies(wavelet=wavelet, normalize=FALSE)
+  filters <- wavDaubechies(wavelet=wavelet, normalized=FALSE)
 
   # perform transform
   data <- lapply(
-    .Call("RS_wavelets_transform_discrete_wavelet_convolution",
+    itCall("RS_wavelets_transform_discrete_wavelet_convolution",
       as.numeric(x),
       list(filters$wavelet,filters$scaling),
-      n.levels,
-      COPY=rep(FALSE,3),
-      CLASSES=c("numeric","list","integer"),
-      PACKAGE="ifultools"),
+      n.levels),
     as.vector)
 
   # develop names of the crystals
@@ -609,7 +608,7 @@
 
   # obtain filters to store for future use
   # use un-normalized daubechies filters
-  filters <- wavDaubechies(wavelet=wavelet, normalize=FALSE)
+  filters <- wavDaubechies(wavelet=wavelet, normalized=FALSE)
 
   # create dictionary
   dict <- wavDictionary(wavelet=wavelet,
@@ -646,7 +645,7 @@
     title.data <- series.name
 
   # obtain the wavelet and scaling filters
-  filters <- wavDaubechies(wavelet=wavelet, normalize=TRUE)
+  filters <- wavDaubechies(wavelet=wavelet, normalized=TRUE)
 
   # set the default number of decomposition levels
   # to be the largest scale at which there exists
@@ -667,13 +666,13 @@
   n.sample <- length(x)
 
   # calculate the MODWPT
-  data <- .Call("RS_wavelets_transform_maximum_overlap_packet",
+  data <- itCall("RS_wavelets_transform_maximum_overlap_packet",
     as(x,"numeric"),
     list(filters$wavelet, filters$scaling),
-    as.integer(n.levels),
-    COPY=rep(FALSE,3),
-    CLASSES=c("numeric","list","numeric"),
-    PACKAGE="ifultools")
+    as.integer(n.levels))
+    #COPY=rep(FALSE,3),
+    #CLASSES=c("numeric","list","numeric"),
+    #PACKAGE="ifultools")
 
   # convert each object from a matrix to a vector
   data <- lapply(data, as.vector)
@@ -746,7 +745,7 @@
   }
 
   # obtain the wavelet and scaling filters
-  filters <- wavDaubechies(wavelet=wavelet, normalize=TRUE)
+  filters <- wavDaubechies(wavelet=wavelet, normalized=TRUE)
 
   # set the default number of decomposition levels
   # to be the largest scale at which there exists
@@ -778,13 +777,13 @@
 
   # call the modwt
   data <- lapply(
-    .Call("RS_wavelets_transform_maximum_overlap",
+    itCall("RS_wavelets_transform_maximum_overlap",
       as.numeric(x),
       list(filters$wavelet,filters$scaling),
-      n.levels,
-      COPY=rep(FALSE,3),
-      CLASSES=c("numeric","list","numeric"),
-      PACKAGE="ifultools"),
+      n.levels),
+      #COPY=rep(FALSE,3),
+      #CLASSES=c("numeric","list","numeric"),
+      #PACKAGE="ifultools"),
     as.vector)
 
   # create dictionary
@@ -1473,21 +1472,21 @@
   # call the inverse transform function
   if (x$xform == "dwt"){
 
-    synthesis <- .Call("RS_wavelets_transform_discrete_wavelet_convolution_inverse",
+    synthesis <- itCall("RS_wavelets_transform_discrete_wavelet_convolution_inverse",
       lapply(x$data,as.vector),
-      list(wavelet.filter,scaling.filter),
-      COPY=rep(FALSE, 2),
-      CLASSES=rep("list", 2),
-      PACKAGE="ifultools")
+      list(wavelet.filter,scaling.filter))
+      #COPY=rep(FALSE, 2),
+      #CLASSES=rep("list", 2),
+      #PACKAGE="ifultools")
   }
   else if (x$xform == "modwt"){
 
-    synthesis <- as.vector(.Call("RS_wavelets_transform_maximum_overlap_inverse",
+    synthesis <- as.vector(itCall("RS_wavelets_transform_maximum_overlap_inverse",
       lapply(x$data, function(x) matrix(x, nrow=1)),
-      list(wavelet.filter,scaling.filter),
-      COPY=c(FALSE,FALSE),
-      CLASSES=c("list","list"),
-      PACKAGE="ifultools"))
+      list(wavelet.filter,scaling.filter)))
+      #COPY=c(FALSE,FALSE),
+      #CLASSES=c("list","list"),
+      #PACKAGE="ifultools"))
   }
   else if (x$xform == "dwpt"){
 
@@ -1511,12 +1510,12 @@
 
     data <- lapply(data, function(x) matrix(as.double(x), nrow=1))
 
-    synthesis <- .Call("RS_wavelets_transform_packet_inverse",
+    synthesis <- itCall("RS_wavelets_transform_packet_inverse",
       data, as.integer(nextra), atoms, levelmap, as.integer(indices),
-      list(wavelet.filter,scaling.filter),
-      COPY=rep(FALSE,6),
-      CLASSES=c("list", "integer", rep("matrix",3), "list"),
-      PACKAGE="ifultools")
+      list(wavelet.filter,scaling.filter))
+      #COPY=rep(FALSE,6),
+      #CLASSES=c("list", "integer", rep("matrix",3), "list"),
+      #PACKAGE="ifultools")
 
     synthesis <- as.vector(synthesis)
   }
@@ -1547,9 +1546,10 @@
 
   zz <- lapply(x$data, as.matrix)
 
-  z <- .Call("RS_wavelets_transform_packet_basis",
-    zz, matrix(as.integer(indices)), COPY=rep(FALSE,2), CLASSES=c("list", "matrix"),
-    PACKAGE="ifultools")
+  z <- itCall("RS_wavelets_transform_packet_basis",
+    zz, matrix(as.integer(indices)))
+    #COPY=rep(FALSE,2), #CLASSES=c("list", "matrix"),
+    #PACKAGE="ifultools")
 
   z <- lapply(z, as.vector)
 

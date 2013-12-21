@@ -35,7 +35,7 @@
     # Warning message:
     # is.na() applied to non-(list or vector) in: is.na(x)
     # but it doesn't show up if I use browser()! Odd.
-    x <- wavDWPT(x, wavelet=wavelet, n.level=n.level)
+    x <- wavDWPT(x, wavelet=wavelet, n.levels=n.level)
   }
 
   # obtain the wavelet and scaling filters
@@ -43,12 +43,13 @@
 
   zz <- lapply(x$data, as.matrix)
 
-  z <- .Call("RS_wavelets_bootstrap",
+  z <- itCall("RS_wavelets_bootstrap",
     zz, list(filters$high,filters$low),
-    white.indices, n.realization,
-    COPY=rep(FALSE,4),
-    CLASSES=c("list", "list", "matrix", "integer"),
-    PACKAGE="ifultools")
+    white.indices, n.realization)
+    #,
+    #COPY=rep(FALSE,4),
+    #CLASSES=c("list", "list", "matrix", "integer"),
+    #PACKAGE="ifultools")
 
   z <- lapply(z, as.vector)
 
@@ -81,7 +82,7 @@
     if (n.level > max.level)
       n.level <- max.level
 
-    x <- wavDWPT(x, wavelet=wavelet, n.level=n.level)
+    x <- wavDWPT(x, wavelet=wavelet, n.levels=n.level)
   }
 
   white.noise.test <- switch(test,
@@ -96,11 +97,12 @@
 
   zz <- lapply(x$data, as.matrix)
 
-  z <- .Call("RS_wavelets_transform_packet_whitest",
-    zz, significance, white.noise.test,
-    COPY=rep(FALSE,3),
-    CLASSES=c("list", "numeric", "integer"),
-    PACKAGE="ifultools")
+  z <- itCall("RS_wavelets_transform_packet_whitest",
+    zz, significance, white.noise.test)
+#,
+    #COPY=rep(FALSE,3),
+    #CLASSES=c("list", "numeric", "integer"),
+    #PACKAGE="ifultools")
 
   dimnames(z) <- list(c("level", "osc"), rep("",ncol(z)))
 

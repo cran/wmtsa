@@ -40,13 +40,14 @@
 {
   xform <- match.arg(lowerCase(xform), c("modwt","modwpt","dwt","dwpt"))
   xform <- ifelse1(xform == "dwpt", "dwt", xform == "modwpt", "modwt", xform)
- 	type  <- mutilsTransformType(xform)
+  type  <- mutilsTransformType(xform)
 
-   n.interior <- .Call("RS_wavelets_transform_coefficient_boundaries",
-     as.integer(20), as.integer(n.taps), as.integer(n.sample), as.integer(type),
-     COPY=rep(FALSE,4),
-     CLASSES=rep("integer",4),
-     PACKAGE="ifultools")[[3]]
+  n.interior <- itCall("RS_wavelets_transform_coefficient_boundaries",
+     as.integer(20), as.integer(n.taps), as.integer(n.sample), as.integer(type))[[3]]
+    #
+     #COPY=rep(FALSE,4),
+     #CLASSES=rep("integer",4),
+     #PACKAGE="ifultools")[[3]]
 
    # here we require that the number of interior wavelet coefficients
    # be greater than unity (rather than greater than zero). we do this

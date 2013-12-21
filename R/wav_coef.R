@@ -308,7 +308,7 @@
     if (x.axis)
       axis(side=1, at=pretty(times), line=1, srt=0, col=1, ...)
     if (y.axis)
-      axis(side=2, at=-(1:n)+.5, lab=crystals, tick=FALSE, line=1, srt=0, col=1, ...)
+      axis(side=2, at=-(1:n)+.5, labels=crystals, tick=FALSE, line=1, srt=0, col=1, ...)
   }
 
   # TODO: replace this with wavStackPlot functionality
@@ -450,11 +450,12 @@
     type <- mutilsTransformType(x$xform)
 
 
-    separation <- .Call("RS_wavelets_transform_coefficient_boundaries",
-			as.integer(J), as.integer(L), as.integer(N), type,
-			COPY=c(FALSE,FALSE,FALSE,FALSE),
-			CLASSES=c("integer","integer","integer","integer"),
-                        PACKAGE="ifultools")
+    separation <- itCall("RS_wavelets_transform_coefficient_boundaries",
+			as.integer(J), as.integer(L), as.integer(N), type)
+        #,
+			#COPY=c(FALSE,FALSE,FALSE,FALSE),
+			#CLASSES=c("integer","integer","integer","integer"),
+                        #PACKAGE="ifultools")
     interior.low    <- rep(separation[[1]], 2)
     interior.high   <- rep(separation[[2]], 2)
     interior.length <- rep(separation[[3]], 2)

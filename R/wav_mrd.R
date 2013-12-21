@@ -131,11 +131,12 @@
 
     detail[n,] <-
       as.vector(
-        .Call("RS_wavelets_transform_packet_detail",
-          xform, filters, as.integer(level[j]), as.integer(osc[n]), as.integer(type),
-          COPY=rep(FALSE,5),
-          CLASSES=c("list","list","integer","integer","integer"),
-          PACKAGE="ifultools"))
+        itCall("RS_wavelets_transform_packet_detail",
+          xform, filters, as.integer(level[j]), as.integer(osc[n]), as.integer(type)))
+    #
+          #COPY=rep(FALSE,5),
+          #CLASSES=c("list","list","integer","integer","integer"),
+          #PACKAGE="ifultools"))
 
     if (is.dwt)
       crystals[n] <- paste(switch(osc[n]+1,"S","D"), level[j], sep="")
@@ -505,7 +506,7 @@
   # obtain the wavelet and scaling filters. the wavelet argument
   # is checked here
   filters <- wavDaubechies(wavelet=wavelet,
-    normalize=!decimated)[c("wavelet","scaling")]
+    normalized=!decimated)[c("wavelet","scaling")]
 
   # initialize length parameters
   L <- length(filters$wavelet)

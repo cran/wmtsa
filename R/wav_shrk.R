@@ -55,7 +55,7 @@
 
   # obtain the wavelet and scaling filters. the wavelet argument
   # is checked here
-  filters <- wavDaubechies(wavelet=wavelet, normalize=!decimated)[c("wavelet","scaling")]
+  filters <- wavDaubechies(wavelet=wavelet, normalized=!decimated)[c("wavelet","scaling")]
 
   # initialize length parameters
   L <- length(filters$wavelet)
@@ -101,14 +101,15 @@
     x  <- c(x, x[ix])
   }
 
-  z <- as.vector(.Call("RS_wavelets_shrink", as.numeric(x), filters,
+  z <- as.vector(itCall("RS_wavelets_shrink", as.numeric(x), filters,
     as.double(matrix(threshold)),
     thrfun$index, as.numeric(thresh.scale), as.numeric(noise.variance),
-    shrfun$index, as.integer(n.level), as.logical(decimated),
-    COPY=rep(FALSE,9),
-    CLASSES = c("matrix", "list", "matrix", "integer", rep("numeric",2),
-	    rep("integer",2), "logical"),
-    PACKAGE="ifultools"))
+    shrfun$index, as.integer(n.level), as.logical(decimated)))
+    #
+    #COPY=rep(FALSE,9),
+    #CLASSES = c("matrix", "list", "matrix", "integer", rep("numeric",2),
+	#    rep("integer",2), "logical"),
+    #PACKAGE="ifultools"))
 
   if (reflect)
     z <- z[seq(N)]

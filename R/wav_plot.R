@@ -82,7 +82,7 @@
     if (x.axis)
       axis(side=1, at=pretty(times), line=1, srt=0, cex.axis=cex.axis, ...)
     if (y.axis)
-      axis(side=2, at=-(1:n)+0.5, lab=nms, tick=FALSE, line=-1, srt=0, cex.axis=cex.axis, ...)
+      axis(side=2, at=-(1:n)+0.5, labels=nms, tick=FALSE, line=-1, srt=0, cex.axis=cex.axis, ...)
   }
 
   for(i in 1:n){

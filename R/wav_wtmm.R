@@ -118,11 +118,12 @@
     if (length(tolerance) < length(scales))
       tolerance <- tolerance[1] / sqrt(scales)
 
-    wtmmz <- .Call("RS_wavelets_transform_continuous_wavelet_modulus_maxima",
-      as.matrix(x)+0i, tolerance, mutilsTransformPeakType(type),
-      CLASSES=c("matrix","numeric","integer"),
-      COPY=rep(FALSE,3),
-      PACKAGE="ifultools")
+    wtmmz <- itCall("RS_wavelets_transform_continuous_wavelet_modulus_maxima",
+      as.matrix(x)+0i, tolerance, mutilsTransformPeakType(type))
+    #
+      #CLASSES=c("matrix","numeric","integer"),
+      #COPY=rep(FALSE,3),
+      #PACKAGE="ifultools")
 
     z <- matrix(0, nrow=nrow(x), ncol=ncol(x))
     z[matrix(unlist(wtmmz),ncol=2)+1] <- 1

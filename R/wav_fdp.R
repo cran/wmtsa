@@ -82,13 +82,15 @@
     if (!scaling)
       n.sample <- -1
 
-    Cprime <- as.vector(.Call("RS_wavelets_fdp_bandpass_variance",
+    Cprime <- as.vector(itCall("RS_wavelets_fdp_bandpass_variance",
       as.integer(levels),
 	    as.numeric(delta),
-	    as.integer(n.sample),
-	    COPY=rep(FALSE,3),
-	    CLASSES=c("integer","numeric","integer"),
-            PACKAGE="ifultools"))
+	    as.integer(n.sample))
+    #,
+	    #COPY=rep(FALSE,3),
+	    #CLASSES=c("integer","numeric","integer"),
+            #PACKAGE="ifultools")
+        )
   }
   else{
     stop("Unsupported method specified for mid-octave SDF value approximation")
@@ -125,7 +127,7 @@
   filter <- mutilsFilterType(wavelet=wavelet)
 
   # obtain filters (needed for storage in dictionary)
-  filters <- wavDaubechies(wavelet=wavelet, normalize=TRUE)
+  filters <- wavDaubechies(wavelet=wavelet, normalized=TRUE)
 
   # store series
   series <- ifelse1(keep.series,
@@ -208,7 +210,7 @@
   else
     sdf.empty <- FALSE
 
-  data <- .Call("RS_wavelets_fdp_estimator_block",
+  data <- itCall("RS_wavelets_fdp_estimator_block",
     as.double(x),
     as.integer(levels),
     as.integer(filter$type),
@@ -217,10 +219,11 @@
     as.logical(bound$mode),
     as.integer(edof.mode),
     as.double(sdf),
-    as.double(delta.range),
-    COPY=rep(FALSE,9),
-    CLASSES=c("numeric",rep("integer",4),"logical","integer","numeric","numeric"),
-    PACKAGE="ifultools")
+    as.double(delta.range))
+#,
+    #COPY=rep(FALSE,9),
+    #CLASSES=c("numeric",rep("integer",4),"logical","integer","numeric","numeric"),
+    #PACKAGE="ifultools")
 
   # remove values outside of delta range. these values
   # are assigned by the C code as a flag for the case
@@ -283,7 +286,7 @@
   filter <- mutilsFilterType(wavelet=wavelet)
 
   # obtain filters (needed for storage in dictionary)
-  filters <- wavDaubechies(wavelet=wavelet, normalize=TRUE)
+  filters <- wavDaubechies(wavelet=wavelet, normalized=TRUE)
 
   # set the default number of decomposition levels
   # to be the largest scale at which there exists
@@ -323,7 +326,7 @@
   # obtain MLEs of FDP paramter delta
   # and corresponding innovation variance
 
-  data <- .Call("RS_wavelets_fdp_estimator_instantaneous",
+  data <- itCall("RS_wavelets_fdp_estimator_instantaneous",
     as.numeric(x),
     as.integer(levels),
     as.integer(filter$type),
@@ -331,10 +334,11 @@
     as.integer(method),
     as.logical(biased),
     as.integer(dof.order),
-    as.numeric(delta.range),
-    COPY=rep(FALSE,8),
-    CLASSES=c("numeric",rep("integer",4),"logical","integer","numeric"),
-    PACKAGE="ifultools")
+    as.numeric(delta.range))
+    #,
+    #COPY=rep(FALSE,8),
+    #CLASSES=c("numeric",rep("integer",4),"logical","integer","numeric"),
+    #PACKAGE="ifultools")
 
   # remove values outside of delta range. these values
   # are assigned by the C code as a flag for the case

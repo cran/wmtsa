@@ -56,7 +56,7 @@
     (2 * (1 - x^2 / s^2) * exp(-x^2 / (2 * s^2)) / sqrt(3 * s) / pi^(1/ 4))
 
   "morlet" <- function(x, w0=5){
-    i <- complex(im=1, re=0)
+    i <- complex(imaginary=1, real=0)
     C <- pi^(-1 / 4) / sqrt(1 - 4/sqrt(3)*exp(-w0^2 / 4) + sqrt(2) * exp(-w0^2 / 2))
     (C * exp(-i * w0 * x) * (exp(-x^2 / 2) - sqrt(2) * exp(- w0^2 / 4) * exp(-x^2)))
   }
@@ -79,13 +79,14 @@
 
   funcarg <- switch(filter-3, sqrt(variance), sqrt(variance), shift, 0.0)
 
-  z <- .Call("RS_wavelets_filters_continuous",
+  z <- itCall("RS_wavelets_filters_continuous",
     as.integer(filter),
     as.numeric(funcarg),
-    as.numeric(frequency),
-    COPY=rep(FALSE,3),
-    CLASSES=c("integer",rep("numeric",2)),
-    PACKAGE="ifultools")
+    as.numeric(frequency))
+    #
+    #COPY=rep(FALSE,3),
+    #CLASSES=c("integer",rep("numeric",2)),
+    #PACKAGE="ifultools")
 
   z <- as.vector(z)
   attr(z, "frequency") <- frequency
@@ -113,11 +114,12 @@
   filter <- mutilsFilterType(wavelet=wavelet)
 
   # obtain filters
-  data <- .Call("RS_wavelets_filters_daubechies",
-    as.integer(filter$length), as.integer(filter$type), as.logical(normalized),
-    COPY=rep(FALSE,3),
-    CLASSES=c("integer","integer","logical"),
-    PACKAGE="ifultools")
+  data <- itCall("RS_wavelets_filters_daubechies",
+    as.integer(filter$length), as.integer(filter$type), as.logical(normalized))
+    #
+    #COPY=rep(FALSE,3),
+    #CLASSES=c("integer","integer","logical"),
+    #PACKAGE="ifultools")
 
   family <- switch(filter$type + 1,
    "Extremal Phase","Least Asymmetric","Best Localized","Coiflet")
@@ -245,7 +247,7 @@
   }
 
   # map filter number and obtain length
-  filter <- wavDaubechies(wavelet=wavelet, normalize=normalize)
+  filter <- wavDaubechies(wavelet=wavelet, normalized=normalize)
   L      <- length(filter$wavelet)
   npad   <- max(L, n.fft)
 
@@ -609,13 +611,14 @@
   if (!is.element(wavelet, supported.wavelets))
     return(list(dwt=NA, modwt=NA, dwpt=NA, modwpt=NA))
 
-  shifts <- .Call("RS_wavelets_filter_zero_phase",
+  shifts <- itCall("RS_wavelets_filter_zero_phase",
     map$type,
     map$length,
-    max(levels),
-    COPY=rep(FALSE,3),
-    CLASSES=rep("integer",3),
-    PACKAGE="ifultools")
+    max(levels))
+    #
+    #COPY=rep(FALSE,3),
+    #CLASSES=rep("integer",3),
+    #PACKAGE="ifultools")
 
   # parse results
   dwtcols     <- c(levels, levels + max(levels))

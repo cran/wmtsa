@@ -368,13 +368,14 @@
   }
   else{
 
-    confidence <- .Call("RS_wavelets_variance_confidence",
+    confidence <- itCall("RS_wavelets_variance_confidence",
       wvar,
       edof,
-      probability,
-      COPY=rep(FALSE,3),
-      CLASSES=c("numeric","numeric","numeric"),
-      PACKAGE="ifultools")
+      probability)
+    #
+      #COPY=rep(FALSE,3),
+      #CLASSES=c("numeric","numeric","numeric"),
+      #PACKAGE="ifultools")
 
     confidence <- lapply(confidence,function(x,crystals){
 	y <- as.vector(x)
@@ -437,17 +438,18 @@
     }
 
     # calculate the EDOF
-    edof <- .Call("RS_wavelets_variance_edof",
+    edof <- itCall("RS_wavelets_variance_edof",
       as.numeric(unlist(interior)),
       as.integer(n.coeff),
       as.numeric(variance),
       as.integer(levels),
       as.numeric(Sx),
       as.integer(filter$type),
-      as.integer(filter$length),
-      COPY=rep(FALSE,7),
-      CLASSES=c("numeric","integer","numeric","integer","numeric","integer","integer"),
-      PACKAGE="ifultools")
+      as.integer(filter$length))
+    #
+      #COPY=rep(FALSE,7),
+      #CLASSES=c("numeric","integer","numeric","integer","numeric","integer","integer"),
+      #PACKAGE="ifultools")
 
     edof <- lapply(edof,
       function(x,crystals){
@@ -479,7 +481,7 @@
     else
       n.level <- as.integer(max(levels))
 
-    xform <- wavMODWT(y, wavelet=wavelet, n.level=n.level)
+    xform <- wavMODWT(y, wavelet=wavelet, n.levels=n.level)
     return(wavEDOF(xform, sdf=sdf, levels=levels, sampling.interval=dt, sdfargs=sdfargs))
   }
   else{
@@ -523,16 +525,17 @@
 
   type <- mutilsTransformType(xform)
 
-  obj <- .Call("RS_wavelets_variance",
+  obj <- itCall("RS_wavelets_variance",
     as.numeric(series@data),
     as.integer(type),
     as.integer(filter$type),
     as.integer(filter$length),
     as.integer(n.levels),
-    as.numeric(Sx),
-    COPY=rep(FALSE,6),
-    CLASSES=c("numeric","integer","integer","integer","integer","numeric"),
-    PACKAGE="ifultools")
+    as.numeric(Sx))
+    #
+    #COPY=rep(FALSE,6),
+    #CLASSES=c("numeric","integer","integer","integer","integer","numeric"),
+    #PACKAGE="ifultools")
 
   is.conf <- as.logical(lowerCase(xform) == "modwt")
 
@@ -552,7 +555,7 @@
 	y <- as.vector(x);names(y) <- crystals;return(y) }, crystals=crystals)
   names(vblock) <- c("biased","unbiased")
 
-  filters <- wavDaubechies(wavelet=wavelet, norm=(xform == "modwt"))
+  filters <- wavDaubechies(wavelet=wavelet, normalized=(xform == "modwt"))
 
   if (is.conf){
 
@@ -569,11 +572,12 @@
 
     names(conf) <- paste("n",1:3,sep="")
 
-    separation <- .Call("RS_wavelets_transform_coefficient_boundaries",
-      as.integer(n.levels), as.integer(filters$length), as.integer(length(series)), as.integer(type),
-      COPY=rep(FALSE,4),
-      CLASSES=rep("integer",4),
-      PACKAGE="ifultools")
+    separation <- itCall("RS_wavelets_transform_coefficient_boundaries",
+      as.integer(n.levels), as.integer(filters$length), as.integer(length(series)), as.integer(type))
+    #
+      #COPY=rep(FALSE,4),
+      #CLASSES=rep("integer",4),
+      #PACKAGE="ifultools")
 
     unbiased.length <- separation[[3]][levels]
     names(unbiased.length) <- crystals
@@ -992,7 +996,7 @@
 
   # if duplicate Nj exist, replicate that row in D.critical.
   # this will occur with sJ and dJ wavelet crystals for example
-  D.critical <- D.critical[pmatch(Nj,D.critical[,1],dup=TRUE),]
+  D.critical <- D.critical[pmatch(Nj,D.critical[,1],duplicates.ok=TRUE),]
 
   # perform the homogeneity test
   is.homogeneous <- apply(D.critical[,-1], 2,
