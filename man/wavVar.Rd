@@ -148,12 +148,14 @@ plot(vmod, pch=15, title="Wavelet Variance of Doppler")
 ## ocean series and calculate EDOF mode 2 
 ## estimates and corresponding 95 percent 
 ## confidence intervals 
+\dontrun{
 vocean <- wavVar(ocean, sdf=oceansdf, wavelet="d6")
 
 ## summarize the results 
 plot(vocean, edof=1:3)
 
 summary(vocean)
+}
 }
 \keyword{univar}
 

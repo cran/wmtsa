@@ -6,8 +6,18 @@
 # IMPORTS
 ###
 
+importClassesFrom(splus2R, signalSeries)
 importFrom(graphics, boxplot, dotchart)
-import(ifultools, splus2R, MASS)
+import(splus2R, ifultools, MASS)
+importFrom("graphics", "abline", "arrows", "axis", "barplot", "box",
+           "boxplot.default", "frame", "grid", "hist", "image",
+           "legend", "lines", "mtext", "par", "persp", "pie", "points",
+           "polygon", "segments", "text", "title")
+importFrom("methods", "as", "hasArg", "is")
+importFrom("stats", "approx", "coef", "deltat", "dnorm", "fft",
+           "integrate", "lm", "mad", "qqline", "qqnorm", "rnorm", "sd",
+           "start", "time", "ts", "tsp", "uniroot", "var")
+
 
 ###
 # S3 Generics

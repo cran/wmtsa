@@ -39,7 +39,7 @@ a vector of numeric values containing the resulting test series.
 \examples{
 nms <- c("blocks", "linchirp", "mishmash1", "bumps")
 z <- lapply(nms, make.signal)
-stackPlot(x=seq(1024),y=z, ylab=nms)
+ifultools::stackPlot(x=seq(1024),y=z, ylab=nms)
 }
 \keyword{ts}
 

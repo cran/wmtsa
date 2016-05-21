@@ -88,7 +88,7 @@ J.F. Muzy, E. Bacry, and A. Arneodo, ``The multifractal formalism revisited with
 ## cusps: h(x = 1) = 0.5 and h(x = 15) = 0.3 
 cusps <- function(x) -0.2 * abs(x-1)^0.5 - 0.5* abs(x-15)^0.3 + 0.00346 * x + 1.34
 x <- seq(-5, 20, length=1000)
-y <- signalSeries(cusps(x), x)
+y <- splus2R::signalSeries(cusps(x), x)
 
 ## calculate CWT using Mexican hat filter 
 W <- wavCWT(y, wavelet="gaussian2")

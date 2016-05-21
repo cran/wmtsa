@@ -41,7 +41,7 @@ Communications on Pure and, Applied Mathematics, 41, 909--96.
 x       <- rnorm(1024)
 x.dwt   <- reconstruct(wavDWT(x))
 x.modwt <- reconstruct(wavMODWT(x))
-all(c(vecnorm(x.dwt-x), vecnorm(x.modwt-x)) < .Machine$single.eps)
+all(c(splus2R::vecnorm(x.dwt-x), splus2R::vecnorm(x.modwt-x)) < .Machine$single.eps)
 }
 \keyword{methods}
 

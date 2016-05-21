@@ -240,7 +240,7 @@ ws <- lapply(thresh, function(k,x)
        shrink.fun="hard", thresh.fun="universal",
        thresh.scale=k, xform="modwt"), x=x)
 
-stackPlot(x=tt, y=data.frame(x, ws),
+ifultools::stackPlot(x=tt, y=data.frame(x, ws),
     ylab=c("sunspots",thresh),
     xlab="Time")
 
@@ -251,7 +251,7 @@ ws <- lapply(threshfuns, function(k,x)
     wavShrink(x, wavelet="s8",
        thresh.fun=k, xform="dwt"), x=x)
 
-stackPlot(x=tt, y=data.frame(x, ws),
+ifultools::stackPlot(x=tt, y=data.frame(x, ws),
 ylab=c("original", threshfuns),
 xlab="Normalized Time")
 }

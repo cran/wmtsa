@@ -52,7 +52,7 @@ Time Series Analysis}, Cambridge University Press, 2000.
 
 \examples{
 ## set the plot grid 
-old.plt <- splitplot(2,2,1)
+old.plt <- ifultools::splitplot(2,2,1)
 
 ## create a frequency vector 
 w <- seq(-10,10,length=1000)
@@ -63,7 +63,7 @@ w <- seq(-10,10,length=1000)
 wavelets <- c("haar", "gaussian1", "gaussian2", "morlet")
 
 for (i in seq(wavelets)){
-    if (i > 1) splitplot(2,2,i)
+    if (i > 1) ifultools::splitplot(2,2,i)
     filt <- wavelets[i]
     plot(w, abs(wavCWTFilters(wavelet=filt, frequency=w)),
        ylab="|Psi(w)|", xlab="frequency", type="l")

@@ -146,7 +146,7 @@ T.W. Randolph and Y. Yasui, \emph{Multiscale Processing of Mass Spectrometry Dat
 ## and sum over decomposition levels 4 to 6 
 x <- as.vector(sunspots)
 z1 <- wavMRDSum(x, levels=4:6)
-stackPlot(x=as.vector(time(sunspots)),
+ifultools::stackPlot(x=as.vector(time(sunspots)),
     y=list(sunspots=x, "D4+D5+D6"=z1),
     ylim=range(x,z1))
 }

@@ -153,7 +153,7 @@ summary(W)
 ## reconstruct the MODWT of the sunspots series 
 ## and compare to the original 
 sunup <- reconstruct(W)
-vecnorm(sunup - sunspots)
+splus2R::vecnorm(sunup - sunspots)
 }
 \keyword{univar}
 

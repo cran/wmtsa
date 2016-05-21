@@ -55,7 +55,7 @@ Cambridge, England: Cambridge University Press, 2001.
 x <- as.numeric(sunspots)
 z <- wavBootstrap(x, n.realization=1)
 
-stackPlot(x=seq(along=sunspots),
+ifultools::stackPlot(x=seq(along=sunspots),
 y=data.frame(x, z, abs(z)),
 ylab=list(text=c("sunspots","wavestrap","|wavestrap|")))
 
