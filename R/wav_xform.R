@@ -51,7 +51,7 @@
 # wavCWT (constructor)
 ###
 
-"wavCWT" <- function(x, scale.range=deltat(x) * c(1, length(x)), n.scale=100,
+wavCWT <- function(x, scale.range=deltat(x) * c(1, length(x)), n.scale=100,
   wavelet="gaussian2", shift=5, variance=1){
 
   # check input argument types and lengths
@@ -83,7 +83,7 @@
   n.scale <- length(scale)
 
   # check scale range
-  if (abs(min(scale) - sampling.interval) > .Machine$double.eps)
+  if (min(scale) + .Machine$double.eps < sampling.interval)
     stop("Minimum scale must be greater than or equal to sampling interval ",
       "of the time series")
 

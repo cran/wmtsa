@@ -1,6 +1,6 @@
 Package: wmtsa
 Title: Wavelet Methods for Time Series Analysis
-Version: 2.0-1
+Version: 2.0-2
 Authors@R: c(person("William", "Constantine", email = "wlbconstan@gmail.com", role = c("cre", "aut")),
              person("Donald", "Percival", email = "dbp@apl.washington.edu", role = "aut"))
 Depends: R (>= 3.0.2)
@@ -16,8 +16,8 @@ Collate: wav_boot.R wav_coef.R wav_dict.R wav_fdp.R wav_filt.R
         wav_var.R wav_wtmm.R wav_xform.R wav_pkg.R
 Repository: CRAN
 NeedsCompilation: no
-Packaged: 2016-05-20 20:48:53 UTC; billconstantine
+Packaged: 2016-06-08 15:49:13 UTC; billconstantine
 Author: William Constantine [cre, aut],
   Donald Percival [aut]
 Maintainer: William Constantine <wlbconstan@gmail.com>
-Date/Publication: 2016-05-21 00:09:18
+Date/Publication: 2016-06-09 06:18:09

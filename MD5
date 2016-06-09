@@ -1,4 +1,4 @@
-a445e09ba44914a1c60205975cfc1a25 *DESCRIPTION
+69b69e398a7801cf4b60f7539cdb7d36 *DESCRIPTION
 5faf56c95bfd4a8cfce66b6c903bf234 *NAMESPACE
 26a45ad3524701ef10237fff057b72b3 *R/sysdata.rda
 fe32ed8953ac22247da3e1fba12af67f *R/wav_boot.R
@@ -15,7 +15,7 @@ e01310cc2abeb0a9b4706b8862e05c1c *R/wav_shrk.R
 44d5ccd7250a16c250b98389c2837214 *R/wav_util.R
 39f7712331134b0efcaa6eecbf4dd452 *R/wav_var.R
 a4fa5dcab3d78c73f680ad20a9fefc8f *R/wav_wtmm.R
-1b2fcaab86b4b6262b49e14b937148a2 *R/wav_xform.R
+0cfe478138185e7a2f28378665f228a9 *R/wav_xform.R
 b4c5ae3cccbcdcce8e42907f18cbd61f *README.md
 ee75cdfd5fe9e7d1fa185edd2a0058cc *man/D.statistic.Rd
 2a7985e49c21d2e6a1e616e85b9e22c8 *man/D.table.Rd
