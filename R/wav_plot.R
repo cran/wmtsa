@@ -4,6 +4,7 @@
 ##  Functions:
 ##
 ##   wavStackPlot.default
+##   wavStemPlot
 ##
 ################################################
 
@@ -136,4 +137,16 @@
 #  xc <- sapply(x, length)
 #  invisible(list(xc, ycenters))
   invisible(ycenters)
+}
+
+wavStemPlot <- function(x, y, pch=16, stem='black', head='red', ...){
+    if (missing(y)){
+        y <- x
+        x <- seq_along(x) 
+    }
+    plot(x, y, pch=pch, col = head, ...)
+    for (i in seq_along(x)){
+        lines(c(x[i], x[i]), c(0, y[i]), col=stem)
+    }
+    invisible(NULL)
 }

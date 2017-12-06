@@ -4,6 +4,7 @@
 ##  Functions:
 ##
 ##    wavCWTFilters
+##    wavEquivFilter
 ##    wavShift
 ##    wavZeroPhase
 ##
@@ -95,6 +96,41 @@
   z
 }
 
+###
+# wavEquivFilter
+###
+
+"wavEquivFilter" <- function(wavelet="s8", level=1, scaling=FALSE, normalized=TRUE)
+{
+    temp <- wavDaubechies(wavelet, normalized = normalized)
+    h <- temp$wavelet
+    g <- temp$scaling
+    if (level == 1) return(if(scaling) g else h)
+    L <- length(h)
+    if(is.numeric(level))
+    {
+        j <- level
+        level <- rep(TRUE,j)
+        if(!scaling) level[j] <- FALSE
+    }
+    else  ## should test here for a character string
+    {
+        level <- strsplit(level,NULL)[[1]] == "G"
+        j <- length(level)
+    }
+    L_j <-  (2^j - 1)*(L - 1) + 1
+    M <- ifultools::nextDyadic(L_j)
+    H <- fft(c(h,rep(0,M-L)))
+    G <- fft(c(g,rep(0,M-L)))
+    dft_filter <- if(level[1]) G else H
+    if(j > 1)
+        for(k in 2:j)
+        {
+            G_or_H <- if(level[k]) G else H
+            dft_filter <- dft_filter * G_or_H[(((2^(k-1))*(0:(M-1))) %% M) + 1]
+        }
+    return(Re(fft(dft_filter,inverse=TRUE)[1:L_j])/M)
+}
 ##############################################################################
 ##
 ##  Constructor wavDaubechies:

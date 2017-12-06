@@ -6,6 +6,7 @@
 ##    wavBestBasis
 ##    wavDWPT
 ##    wavDWT
+##    wavDWTMatrix
 ##    wavMODWPT
 ##    wavMODWT
 ##    wavPacketBasis
@@ -620,6 +621,62 @@ wavCWT <- function(x, scale.range=deltat(x) * c(1, length(x)), n.scale=100,
   # use wavTransform constructor to create output object
   wavTransform(data=data, series=series, n.levels=as.integer(n.levels),
     dictionary=dict, shifted=FALSE, xform="dwt")
+}
+
+###
+# wavDWTMatrix
+###
+
+"wavDWTMatrix" <- function(wavelet="d4", J=4, J0=J)
+{
+    # Check inputs
+    J <- as.integer(J)
+    J0 <- as.integer(J0)
+    stopifnot(J > 0, J0 > 0, J0 <= J)
+    stopifnot(is.character(wavelet), length(wavelet) == 1L)
+    
+    # Define local functions
+    zero_pad <- function(x, n) c(x, rep(0, max(0, n - length(x))))
+    
+    periodize <- function(x, N)
+    {
+        L <- length(x)
+        return(if (L <= N) zero_pad(x, N)
+               else
+                   rowSums(matrix(zero_pad(x,ceiling(L/N)*N),nrow=N)))
+    }
+    
+    # Initialize variables
+    N <- 2^J
+    W_matrix <- NULL
+    
+    # Construct rows with equivalent wavelet filters of levels 1, ..., J0
+    for(j in seq_len(J0))
+    {
+        shift_j <- 2^j 
+        w_row <- rotateVector(x=rev(periodize(wavEquivFilter(wavelet = wavelet,
+                                                             level = j,
+                                                             normalized = FALSE),
+                                              N)), shift=shift_j)
+        for(k in seq_len(N/shift_j)){
+            W_matrix <- rbind(W_matrix, w_row)
+            w_row <- rotateVector(x=w_row, shift=shift_j)
+        }
+    }
+    
+    # construct rows with equivalent scaling filter of level J0
+    s_row <- rotateVector(x=rev(periodize(wavEquivFilter(wavelet = wavelet,
+                                                         level = J0,
+                                                         scaling = TRUE,
+                                                         normalized = FALSE),
+                                          N)), shift = shift_j)
+    for(k in seq_len(N/shift_j))
+    {
+        W_matrix <- rbind(W_matrix, s_row)
+        s_row <- rotateVector(x=s_row, shift=shift_j)
+    }
+    
+    return(W_matrix)
 }
 
 ###
